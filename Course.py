@@ -3,7 +3,7 @@ from sqlalchemy import Integer, UniqueConstraint, ForeignKeyConstraint
 from sqlalchemy import String, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from Department import Department
-
+from typing import List    # to get clist of sections
 
 class Course(Base):
     """A catalog entry.  Each course proposes to offer students who enroll in
