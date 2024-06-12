@@ -46,35 +46,38 @@ class Course(Base):
     __table_args__ = (UniqueConstraint("department_abbreviation", "name", name="courses_uk_01"),
                       ForeignKeyConstraint([departmentAbbreviation],
                                            [Department.abbreviation]))
-
     def __init__(self, department: Department, courseNumber: int, name: str, description: str, units: int):
-        self.set_department(department)
-        self.courseNumber = courseNumber
-        self.name = name
-        self.description = description
-        self.units = units
+            self.init(department, courseNumber, name, description, units)
 
-    def set_department(self, department: Department):
-        """
-        Accept a new department withoug checking for any uniqueness.
-        I'm going to assume that either a) the caller checked that first
-        and/or b) the database will raise its own exception.
-        :param department:  The new department for the course.
-        :return:            None
-        """
-        self.department = department
-        self.departmentAbbreviation = department.abbreviation
-    
-   def set_sections(self, sections: List["Section"]):
-        self.sections = sections  
-        for section in sections:
-            section.course = self
-    
-    def __str__(self):
-        return f"Department abbrev: {self.departmentAbbreviation} number: {self.courseNumber} name: {self.name} units: {self.units}"
-    
+'''
+    Setting up to make sure dependent tables are defined 
+'''
+def set_department(self, department: Department):
+    """
+    Accept a new department without checking for any uniqueness.
+    I'm going to assume that either a) the caller checked that first
+    and/or b) the database will raise its own exception.
+    :param department:  The new department for the course.
+    :return:            None
+    """
+    self.department = department
+    self.departmentAbbreviation = department.abbreviation
+
+
+def init(self, department: Department, courseNumber: int, name: str, description: str, units: int):
+    self.set_department(department)
+    self.courseNumber = courseNumber
+    self.name = name
+    self.description = description
+    self.units = units
+
+
+def __str__(self):
+    return f"Department abbrev: {self.departmentAbbreviation} number: {self.courseNumber} name: {self.name} units: {self.units}"
+
+
 """Add the two instance methods to the class, regardless of whether we introspect or not."""
-setattr(Course, '__init__', __init__)
+setattr(Course, 'init', init)
 setattr(Course, 'set_department', set_department)
 setattr(Course, '__str__', __str__)
 
