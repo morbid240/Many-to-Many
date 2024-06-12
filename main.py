@@ -362,6 +362,20 @@ def delete_department(session: Session):
         session.delete(department)
 
 
+def delete_course(session):
+    """
+    Prompt the user to select a course by department abbreviation and course number, then delete it.
+    :param session: The connection to the database.
+    :return: None
+    """
+    print("Deleting a course")
+    course = select_course(session)
+    if 0 < session.query(Sections).filter(Section.courseNumber == course.courseNumber).count():
+        print("Sections depend on this course, go delete them first and try again.")
+    else:
+        session.delete(course)
+        
+
 def delete_section(session):
     """
     Prompt the user to select a section by its attributes, then delete it.
