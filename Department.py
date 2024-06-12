@@ -42,4 +42,4 @@ class Department(Base):
         return self.courses
 
     def __str__(self):
-        return f"Department abbreviation: {self.abbreviation} name: {self.name} number course offered: {len(self.courses)}"
+        return f"Department: {self.abbreviation}: {self.name} \n\tnumber course offered: {len(self.courses)}\n"
