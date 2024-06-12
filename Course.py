@@ -3,6 +3,7 @@ from sqlalchemy import Integer, UniqueConstraint, ForeignKeyConstraint
 from sqlalchemy import String, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from Department import Department
+from Section import Section
 from typing import List    # to get clist of sections
 
 class Course(Base):
@@ -32,8 +33,8 @@ class Course(Base):
     relationship to department: many to one, we map course to one department
     relatiosnhip to section: one to many where we keep track of a list of sections
     for every course. '''
-    department: Mapped["Department"] = relationship(back_populates="courses")
     sections: Mapped[List["Section"]] = relationship(back_populates="course")
+    department: Mapped["Department"] = relationship(back_populates="courses")
     # Uniquness constraints, foreign keys etc
     __table_args__ = (UniqueConstraint("department_abbreviation", "name", name="courses_uk_01"),
                       ForeignKeyConstraint([departmentAbbreviation],
