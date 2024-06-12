@@ -65,7 +65,7 @@ def init(self, department: Department, courseNumber: int, name: str, description
 
 
 def __str__(self):
-    return f"Department abbrev: {self.departmentAbbreviation} number: {self.courseNumber} name: {self.name} units: {self.units}"
+    return f"\n{self.departmentAbbreviation} {self.courseNumber} \n\t{self.name} \tunits: {self.units}\n"
 
 
 """Add the two instance methods to the class, regardless of whether we introspect or not."""
