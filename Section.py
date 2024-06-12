@@ -50,7 +50,7 @@ class Section(Base):
         CheckConstraint(schedule.in_(["MW", "TuTh", "MWF", "F", "S"])),
         CheckConstraint(building.in_(["VEC", "ECS", "EN2", "EN3", "EN4", "ET", "SSPA"])),
         # Course (Parent) contains two primary keys. Referencing mapped_column and not attribute here
-        ForeignKeyConstraint([departmentAbbreviation, courseNumber], [Course.departmentAbbreviation, Course.courseNumber])
+        ForeignKeyConstraint([departmentAbbreviation, courseNumber], [courses.departmentAbbreviation, courses.courseNumber])
     )
     
     # "Constructor" for Section
