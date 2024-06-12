@@ -16,6 +16,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from sqlalchemy import Table
 from constants import START_OVER, REUSE_NO_INTROSPECTION, INTROSPECT_TABLES
 
+from Course import Course
 
 table_name: str = "sections"  # The physical name of this table
 # Find out whether the user is introspecting or starting over
@@ -50,7 +51,8 @@ class Section(Base):
         CheckConstraint(schedule.in_(["MW", "TuTh", "MWF", "F", "S"])),
         CheckConstraint(building.in_(["VEC", "ECS", "EN2", "EN3", "EN4", "ET", "SSPA"])),
         # Course (Parent) contains two primary keys. Referencing mapped_column and not attribute here
-        ForeignKeyConstraint([departmentAbbreviation, courseNumber], [course.departmentAbbreviation, course.courseNumber])
+        ForeignKeyConstraint([departmentAbbreviation, courseNumber], 
+                             [Course.departmentAbbreviation, Course.courseNumber])
     )
     
     # "Constructor" for Section
