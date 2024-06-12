@@ -58,6 +58,8 @@ class Section(Base):
     # "Constructor" for Section
     def __init__(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
                      building: str, room: int, schedule: str, startTime: Time, instructor: str ):
+        # ensure we got an instance of a course for dependency
+        self.set_course(course)
         self.sectionNumber = sectionNumber
         self.semester = semester
         self.sectionYear = sectionYear
@@ -71,6 +73,7 @@ class Section(Base):
     # Accepts a new course without uniqueness constraints
     def set_course(self, course: Course):
         self.course = course
+        self.departmentAbbreviation = course.departmentAbbreviation
         self.courseNumber = course.courseNumber
 
     
