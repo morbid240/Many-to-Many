@@ -58,6 +58,6 @@ class Course(Base):
         return f"Department abbrev: {self.departmentAbbreviation} number: {self.courseNumber} name: {self.name} units: {self.units}"
 
 """Add the two instance methods to the class, regardless of whether we introspect or not."""
-setattr(Course, 'init', init)
+
 setattr(Course, 'set_department', set_department)
 setattr(Course, '__str__', __str__)
