@@ -1,4 +1,5 @@
 from Department import Department 
+from Course import Course
 
 def add_department(session: Session):
     """
@@ -26,3 +27,59 @@ def add_department(session: Session):
                 print("We already have a department with that abbreviation.  Try again.")
     new_department = Department(abbreviation, name)
     session.add(new_department)
+
+
+def select_department(sess: Session) -> Department:
+    """
+    Prompt the user for a specific department by the department abbreviation.
+    :param sess:    The connection to the database.
+    :return:        The selected department.
+    """
+    found: bool = False
+    abbreviation: str = ''
+    while not found:
+        abbreviation = input("Enter the department abbreviation--> ")
+        abbreviation_count: int = sess.query(Department). \
+            filter(Department.abbreviation == abbreviation).count()
+        found = abbreviation_count == 1
+        if not found:
+            print("No department with that abbreviation.  Try again.")
+    return_department: Department = sess.query(Department). \
+        filter(Department.abbreviation == abbreviation).first()
+    return return_department
+
+def delete_department(session: Session):
+    """
+    Prompt the user for a department by the abbreviation and delete it.
+    :param session: The connection to the database.
+    :return:        None
+    """
+    print("deleting a department")
+    department = select_department(session)
+    n_courses = session.query(Course).filter(Course.departmentAbbreviation == department.abbreviation).count()
+    if n_courses > 0:
+        print(f"Sorry, there are {n_courses} courses in that department.  Delete them first, "
+              "then come back here to delete the department.")
+    else:
+        session.delete(department)
+
+def list_department(session: Session):
+    """
+    List all departments, sorted by the abbreviation.
+    :param session:     The connection to the database.
+    :return:            None
+    """
+    # session.query returns an iterator.  The list function converts that iterator
+    # into a list of elements.  In this case, they are instances of the Student class.
+    departments: [Department] = list(session.query(Department).order_by(Department.abbreviation))
+    for department in departments:
+        print(department)
+
+
+def list_department_courses(sess):
+    department = select_department(sess)
+    dept_courses: [Course] = department.get_courses()
+    print("Course for department: " + str(department))
+    for dept_course in dept_courses:
+        print(dept_course)
+
