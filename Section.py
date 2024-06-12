@@ -70,17 +70,21 @@ class Section(Base):
         self.instructor = instructor
 
 
-    # Accepts a new course without uniqueness constraints
-    def set_course(self, course: Course):
-        self.course = course
-        self.departmentAbbreviation = course.departmentAbbreviation
-        self.courseNumber = course.courseNumber
 
-    
-    # Return variables I guess that are within the class. 
-    # Im not sure how it knows this if its outside of class/scope
-    def __str__(self):
-        return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
-                Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTIME}\nInstructor: {self.instructor}"
+# Accepts a new course without uniqueness constraints
+def set_course(self, course: Course):
+    self.course = course
+    self.courseNumber = course.courseNumber
+
+# Return variables I guess that are within the class. 
+# Im not sure how it knows this if its outside of class/scope
+def __str__(self):
+    return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
+            Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTIME}\nInstructor: {self.instructor}"
+
+
+"""Add the two instance methods to the class, regardless of whether we introspect or not."""
+setattr(Section, 'set_course', set_course)
+setattr(Section, '__str__', __str__)
     
 
