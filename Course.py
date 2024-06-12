@@ -28,7 +28,10 @@ class Course(Base):
     name: Mapped[str] = mapped_column('name', String(50), nullable=False)
     description: Mapped[str] = mapped_column('description', String(500), nullable=False)
     units: Mapped[int] = mapped_column('units', Integer, nullable=False)
-    # Relationships
+    '''
+    relationship to department: many to one, we map course to one department
+    relatiosnhip to section: one to many where we keep track of a list of sections
+    for every course. '''
     department: Mapped["Department"] = relationship(back_populates="courses")
     sections: Mapped[List["Section"]] = relationship(back_populates="course")
     # Uniquness constraints, foreign keys etc
