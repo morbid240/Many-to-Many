@@ -47,23 +47,22 @@ class Section(Base):
         CheckConstraint(schedule.in_(["MW", "TuTh", "MWF", "F", "S"])),
         CheckConstraint(building.in_(["VEC", "ECS", "EN2", "EN3", "EN4", "ET", "SSPA"])),
         # Course (Parent) contains two primary keys. Referencing mapped_column and not attribute here
-        ForeignKeyConstraint(['department_abbreviation', 'course_number'], 
-                             ['courses.department_abbreviation', 'courses.course_number'])
+        ForeignKeyConstraint([departmentAbbreviation, courseNumber], 
+                             [Course.departmentAbbreviation, Course.courseNumber])
     )
     
-    def __init__(self, departmentAbbreviation: str, courseNumber: int, sectionNumber: int, semester: str, sectionYear: int,  
+    def __init__(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
                      building: str, room: int, schedule: str, startTime: Time, instructor: str):
-            self.init(departmentAbbreviation, courseNumber, sectionNumber, semester, sectionYear,  
+            self.init(course, sectionNumber, semester, sectionYear,  
                      building, room, schedule, startTime, instructor)
 
 
 '''
     Init outside of class
 '''
-def init(self, departmentAbbreviation: str, courseNumber: int, sectionNumber: int, semester: str, sectionYear: int,  
-                 building: str, room: int, schedule: str, startTime: Time, instructor: str):
-    self.departmentAbbreviation = departmentAbbreviation
-    self.courseNumber = courseNumber
+def init(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
+                     building: str, room: int, schedule: str, startTime: Time, instructor: str):
+    self.set_course(course)
     self.sectionNumber = sectionNumber
     self.semester = semester
     self.sectionYear = sectionYear
@@ -72,15 +71,16 @@ def init(self, departmentAbbreviation: str, courseNumber: int, sectionNumber: in
     self.schedule = schedule
     self.startTime = startTime
     self.instructor = instructor
-def set_course(self, departmentAbbreviation: str, courseNumber: int):
+def set_course(self, course: Course):
     """
     Set the course for this section using department abbreviation and course number.
     :param departmentAbbreviation: The department abbreviation of the course.
     :param courseNumber: The course number.
     :return: None
     """
-    self.departmentAbbreviation = departmentAbbreviation
-    self.courseNumber = courseNumber
+    self.course = course
+    self.departmentAbbreviation = course.departmentAbbreviation
+    self.courseNumber = course.courseNumber
     
 def __str__(self):
     return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
