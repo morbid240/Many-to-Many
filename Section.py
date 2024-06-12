@@ -38,8 +38,8 @@ class Section(Base):
 
     # Constraints
     __table_args__ = (
-        # Canidate key 1: room cannot be occupied by more than one section at the same time, 
-        # Canidate key 2: instructor can't teach two sections at same time
+        # Candidate key 1: room cannot be occupied by more than one section at the same time, 
+        # Candidate key 2: instructor can't teach two sections at the same time
         UniqueConstraint("section_year", "semester", "schedule", "start_time", "building", "room", name="section_uk_01"),
         UniqueConstraint("section_year", "semester", "schedule", "start_time", "instructor", name="section_uk_02"), 
         # Ensure valid input
@@ -51,39 +51,31 @@ class Section(Base):
                              [Course.departmentAbbreviation, Course.courseNumber])
     )
     
+    def __init__(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
+                     building: str, room: int, schedule: str, startTime: Time, instructor: str):
+        # ensure we got an instance of a course for dependency
+        self.set_course(course)
+        self.sectionNumber = sectionNumber
+        self.semester = semester
+        self.sectionYear = sectionYear
+        self.building = building
+        self.room = room
+        self.schedule = schedule
+        self.startTime = startTime
+        self.instructor = instructor
 
+    def set_course(self, course: Course):
+        self.course = course
+        self.courseNumber = course.courseNumber
 
-# "Constructor" for Section
-def __init__(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
-                 building: str, room: int, schedule: str, startTime: Time, instructor: str ):
-    # ensure we got an instance of a course for dependency
-    self.set_course(course)
-    self.sectionNumber = sectionNumber
-    self.semester = semester
-    self.sectionYear = sectionYear
-    self.building = building
-    self.room = room
-    self.schedule = schedule
-    self.startTime = startTime
-    self.instructor = instructor
+    def __str__(self):
+        return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
+                Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTime}\nInstructor: {self.instructor}"
 
+# Add the __init__, set_course, and __str__ methods to the Section class
+setattr(Section, '__init__', __init__)
+setattr(Section, 'set_course', set_course)
+setattr(Section, '__str__', __str__)
 
-
-# Accepts a new course without uniqueness constraints
-def set_course(self, course: Course):
-    self.course = course
-    self.courseNumber = course.courseNumber
-
-# Return variables I guess that are within the class. 
-# Im not sure how it knows this if its outside of class/scope
-def __str__(self):
-    return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
-            Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTIME}\nInstructor: {self.instructor}"
-
-
-"""Add the two instance methods to the class, regardless of whether we introspect or not."""
-setattr(Course, '_init_', _init_)
-setattr(Course, 'set_course', set_course)
-setattr(Course, '__str__', __str__)
     
 
