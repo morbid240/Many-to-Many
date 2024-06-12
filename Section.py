@@ -64,9 +64,6 @@ class Section(Base):
         self.startTime = startTime
         self.instructor = instructor
 
-    def set_course(self, course: Course):
-        self.course = course
-        self.courseNumber = course.courseNumber
 
     def __str__(self):
         return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
