@@ -9,7 +9,6 @@ relationship to Course along with its constraints
 
 from orm_base import Base
 from db_connection import engine
-from IntrospectionFactory import IntrospectionFactory
 from sqlalchemy import UniqueConstraint, ForeignKeyConstraint, CheckConstraint
 from sqlalchemy import String, Integer, Time
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
