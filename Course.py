@@ -5,6 +5,14 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from Department import Department
 from typing import List    # to get clist of sections
 
+
+from orm_base import Base
+from sqlalchemy import Integer, UniqueConstraint, ForeignKeyConstraint
+from sqlalchemy import String, Integer
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from Department import Department
+from typing import List    # to get clist of sections
+
 class Course(Base):
     """A catalog entry.  Each course proposes to offer students who enroll in
     a section of the course an organized sequence of lessons and assignments
@@ -56,16 +64,17 @@ class Course(Base):
         """
         self.department = department
         self.departmentAbbreviation = department.abbreviation
-
     
    def set_sections(self, sections: List["Section"]):
         self.sections = sections  
         for section in sections:
             section.course = self
-
     
     def __str__(self):
         return f"Department abbrev: {self.departmentAbbreviation} number: {self.courseNumber} name: {self.name} units: {self.units}"
     
+
+
+
 
 
