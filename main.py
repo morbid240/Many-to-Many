@@ -8,6 +8,7 @@ from orm_base import metadata
 # will not execute that code, and SQLAlchemy will be unaware of the mapped table.
 from Department import Department
 from Course import Course
+from Section import Section
 from Major import Major
 from Student import Student
 from StudentMajor import StudentMajor
