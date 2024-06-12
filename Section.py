@@ -19,7 +19,7 @@ from Course import Course
 
 
 class Section(Base):
-    table_name: str = "sections"  # The physical name of this table
+    __tablename__ = "sections" # The physical name of this table
     # PRIMARY KEYS
     departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation', primary_key=True)
     courseNumber: Mapped[int] = mapped_column('course_number', primary_key=True)
