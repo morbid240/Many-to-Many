@@ -58,15 +58,8 @@ class Course(Base):
         self.departmentAbbreviation = department.abbreviation
 
     
-    def set_sections(self, sections: List["Section"]):
-        """
-        Set the list of sections for this course.
-        :param sections: The list of sections to set for this course.
-        :return: None
-        """
-        self.sections = sections  # This line sets the sections attribute of the Course instance
-
-        # SQLAlchemy automatically updates the course attribute of each Section instance in the list
+   def set_sections(self, sections: List["Section"]):
+        self.sections = sections  
         for section in sections:
             section.course = self
 
