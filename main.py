@@ -114,7 +114,7 @@ def add_section(session):
     schedule = input("Enter Schedule --> ")
     start_time = Time(input("Enter Start Time (HH:MM:SS) --> "))
     violation = True  # Flag that we still have to prompt for fresh values
-    while violation
+    while violation:
         building = input("Section Building --> ")
         room = int(input("Section Room --> "))
         instructor = input("Instructor --> ")
