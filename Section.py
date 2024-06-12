@@ -16,8 +16,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from sqlalchemy import Table
 from constants import START_OVER, REUSE_NO_INTROSPECTION, INTROSPECT_TABLES
 
-from Course import Course
-
 
 class Section(Base):
     table_name: str = "sections"  # The physical name of this table
@@ -47,14 +45,13 @@ class Section(Base):
         CheckConstraint(schedule.in_(["MW", "TuTh", "MWF", "F", "S"])),
         CheckConstraint(building.in_(["VEC", "ECS", "EN2", "EN3", "EN4", "ET", "SSPA"])),
         # Course (Parent) contains two primary keys. Referencing mapped_column and not attribute here
-        ForeignKeyConstraint([departmentAbbreviation, courseNumber], 
-                             [Course.departmentAbbreviation, Course.courseNumber])
+        ForeignKeyConstraint(['department_abbreviation', 'course_number'], ['courses.department_abbreviation', 'courses.course_number'])
     )
     
-    def __init__(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
+    def __init__(self, departmentAbbreviation: str, courseNumber: int, sectionNumber: int, semester: str, sectionYear: int,  
                      building: str, room: int, schedule: str, startTime: Time, instructor: str):
-        # ensure we got an instance of a course for dependency
-        self.set_course(course)
+        self.departmentAbbreviation = departmentAbbreviation
+        self.courseNumber = courseNumber
         self.sectionNumber = sectionNumber
         self.semester = semester
         self.sectionYear = sectionYear
@@ -64,7 +61,16 @@ class Section(Base):
         self.startTime = startTime
         self.instructor = instructor
 
-
+    def set_course(self, departmentAbbreviation: str, courseNumber: int):
+        """
+        Set the course for this section using department abbreviation and course number.
+        :param departmentAbbreviation: The department abbreviation of the course.
+        :param courseNumber: The course number.
+        :return: None
+        """
+        self.departmentAbbreviation = departmentAbbreviation
+        self.courseNumber = courseNumber
+    
     def __str__(self):
         return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
                 Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTime}\nInstructor: {self.instructor}"
