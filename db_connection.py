@@ -42,11 +42,11 @@ application.  This seemed a much better solution than prompting for this informa
 each time that you run the application."""
 config = ConfigParser()
 config.read('config.ini')               # the config.ini file has to be in the working directory.
-userID: str = config['credentials']['userid']
-password: str = config['credentials']['password']
-host: str = config['credentials']['host']
-port: str = config['credentials']['port']
-database: str = config['credentials']['database']
+userID: str = config['credentials']['030573684']
+password: str = config['credentials']['ylN(gzFN']
+host: str = config['credentials']['CECS-Postgresql']
+port: str = config['credentials']['5432']
+database: str = config['credentials']['2024SummerS01']
 # 'psycopg2' in this part of the db_url instructs SQLAlchemy that we are connecting to a PostgreSQL database.
 db_url: str = f"postgresql+psycopg2://{userID}:{password}@{host}:{port}/{database}"
 db_url_display: str = f"postgresql+psycopg2://{userID}:********@{host}:{port}/{database}"
