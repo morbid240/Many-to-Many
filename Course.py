@@ -21,18 +21,17 @@ class Course(Base):
     ForeignKey.  I show you how to do it in __table_args__ because you'll need
     that for the relationship from courses into sections.
     """
-    departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation',
- #                                                       ForeignKey("departments.abbreviation"),
-                                                        primary_key=True)
-    department: Mapped["Department"] = relationship(back_populates="courses")
-    courseNumber: Mapped[int] = mapped_column('course_number', Integer,
-                                              nullable=False, primary_key=True)
+    # Primary keys
+    departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation', primary_key=True)
+    courseNumber: Mapped[int] = mapped_column('course_number', Integer, nullable=False, primary_key=True)
+    # Basic attributes
     name: Mapped[str] = mapped_column('name', String(50), nullable=False)
     description: Mapped[str] = mapped_column('description', String(500), nullable=False)
     units: Mapped[int] = mapped_column('units', Integer, nullable=False)
-    # __table_args__ can best be viewed as directives that we ask SQLAlchemy to
-    # send to the database.  In this case, that we want two separate uniqueness
-    # constraints (candidate keys).
+    # Relationships
+    department: Mapped["Department"] = relationship(back_populates="courses")
+    sections: Mapped[List["Section"]] = relationship(back_populates="course")
+    # Uniquness constraints, foreign keys etc
     __table_args__ = (UniqueConstraint("department_abbreviation", "name", name="courses_uk_01"),
                       ForeignKeyConstraint([departmentAbbreviation],
                                            [Department.abbreviation]))
