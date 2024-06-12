@@ -18,13 +18,9 @@ from constants import START_OVER, REUSE_NO_INTROSPECTION, INTROSPECT_TABLES
 
 from Course import Course
 
-table_name: str = "sections"  # The physical name of this table
-# Find out whether the user is introspecting or starting over
-introspection_type = IntrospectionFactory().introspection_type
-
 
 class Section(Base):
-    __tablename__ = table_name  # Give SQLAlchemy the name of the table.
+    table_name: str = "sections"  # The physical name of this table
     # PRIMARY KEYS
     departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation', primary_key=True)
     courseNumber: Mapped[int] = mapped_column('course_number', primary_key=True)
@@ -55,19 +51,21 @@ class Section(Base):
                              [Course.departmentAbbreviation, Course.courseNumber])
     )
     
-    # "Constructor" for Section
-    def __init__(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
-                     building: str, room: int, schedule: str, startTime: Time, instructor: str ):
-        # ensure we got an instance of a course for dependency
-        self.set_course(course)
-        self.sectionNumber = sectionNumber
-        self.semester = semester
-        self.sectionYear = sectionYear
-        self.building = building
-        self.room = room
-        self.schedule = schedule
-        self.startTime = startTime
-        self.instructor = instructor
+
+
+# "Constructor" for Section
+def __init__(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
+                 building: str, room: int, schedule: str, startTime: Time, instructor: str ):
+    # ensure we got an instance of a course for dependency
+    self.set_course(course)
+    self.sectionNumber = sectionNumber
+    self.semester = semester
+    self.sectionYear = sectionYear
+    self.building = building
+    self.room = room
+    self.schedule = schedule
+    self.startTime = startTime
+    self.instructor = instructor
 
 
 
@@ -84,7 +82,8 @@ def __str__(self):
 
 
 """Add the two instance methods to the class, regardless of whether we introspect or not."""
-setattr(Section, 'set_course', set_course)
-setattr(Section, '__str__', __str__)
+setattr(Course, '_init_', _init_)
+setattr(Course, 'set_course', set_course)
+setattr(Course, '__str__', __str__)
     
 
