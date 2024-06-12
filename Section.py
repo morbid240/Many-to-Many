@@ -16,6 +16,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from sqlalchemy import Table
 from constants import START_OVER, REUSE_NO_INTROSPECTION, INTROSPECT_TABLES
 
+from Course import Course
+
 
 class Section(Base):
     table_name: str = "sections"  # The physical name of this table
@@ -50,33 +52,41 @@ class Section(Base):
     
     def __init__(self, departmentAbbreviation: str, courseNumber: int, sectionNumber: int, semester: str, sectionYear: int,  
                      building: str, room: int, schedule: str, startTime: Time, instructor: str):
-        self.departmentAbbreviation = departmentAbbreviation
-        self.courseNumber = courseNumber
-        self.sectionNumber = sectionNumber
-        self.semester = semester
-        self.sectionYear = sectionYear
-        self.building = building
-        self.room = room
-        self.schedule = schedule
-        self.startTime = startTime
-        self.instructor = instructor
+            self.init(departmentAbbreviation, courseNumber, sectionNumber, semester, sectionYear,  
+                     building, room, schedule, startTime, instructor)
 
-    def set_course(self, departmentAbbreviation: str, courseNumber: int):
-        """
-        Set the course for this section using department abbreviation and course number.
-        :param departmentAbbreviation: The department abbreviation of the course.
-        :param courseNumber: The course number.
-        :return: None
-        """
-        self.departmentAbbreviation = departmentAbbreviation
-        self.courseNumber = courseNumber
+
+'''
+    Init outside of class
+'''
+def init(self, departmentAbbreviation: str, courseNumber: int, sectionNumber: int, semester: str, sectionYear: int,  
+                 building: str, room: int, schedule: str, startTime: Time, instructor: str):
+    self.departmentAbbreviation = departmentAbbreviation
+    self.courseNumber = courseNumber
+    self.sectionNumber = sectionNumber
+    self.semester = semester
+    self.sectionYear = sectionYear
+    self.building = building
+    self.room = room
+    self.schedule = schedule
+    self.startTime = startTime
+    self.instructor = instructor
+def set_course(self, departmentAbbreviation: str, courseNumber: int):
+    """
+    Set the course for this section using department abbreviation and course number.
+    :param departmentAbbreviation: The department abbreviation of the course.
+    :param courseNumber: The course number.
+    :return: None
+    """
+    self.departmentAbbreviation = departmentAbbreviation
+    self.courseNumber = courseNumber
     
-    def __str__(self):
-        return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
-                Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTime}\nInstructor: {self.instructor}"
+def __str__(self):
+    return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
+            Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTime}\nInstructor: {self.instructor}"
 
 # Add the __init__, set_course, and __str__ methods to the Section class
-setattr(Section, '__init__', __init__)
+setattr(Section, 'init', init)
 setattr(Section, 'set_course', set_course)
 setattr(Section, '__str__', __str__)
 
