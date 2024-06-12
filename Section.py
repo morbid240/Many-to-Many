@@ -47,7 +47,8 @@ class Section(Base):
         CheckConstraint(schedule.in_(["MW", "TuTh", "MWF", "F", "S"])),
         CheckConstraint(building.in_(["VEC", "ECS", "EN2", "EN3", "EN4", "ET", "SSPA"])),
         # Course (Parent) contains two primary keys. Referencing mapped_column and not attribute here
-        ForeignKeyConstraint(['department_abbreviation', 'course_number'], ['courses.department_abbreviation', 'courses.course_number'])
+        ForeignKeyConstraint(['department_abbreviation', 'course_number'], 
+                             ['courses.department_abbreviation', 'courses.course_number'])
     )
     
     def __init__(self, departmentAbbreviation: str, courseNumber: int, sectionNumber: int, semester: str, sectionYear: int,  
