@@ -6,56 +6,37 @@ from sqlalchemy import ForeignKeyConstraint
 from typing import List 
 
 
-from Student import Student 
-from Section import Section
-'''
-a.	Uniqueness Constraints
-
-    i.	This will have, as an OO attribute, a reference to Student and Section.
-
-    ii.	Obviously, as Enrollment is the association class between Student and Section, 
-        the primary key of Enrollment must be the combination of the primary key migrating 
-        into Enrollment from Student and the primary key migrating into Enrollment from Section.
-
-    iii.	
-        We want to be sure that no student enrolls in the same course more than once in the same semester.  
-        For instance, you would not want a student to be able to enroll in section 01 of CECS 323 for Fall 
-        of 2023 and section 03 of CECS 323 for Fall of 2023.  One way is to create a 
-        uniqueness constraint {department_abbreviation, course_number, section_year, semester, student_id}. 
-        But that only works if those columns migrate into enrollments from sections.  If you gave sections a surrogate, 
-        you will have to find some other way to enforce this constraint.
-
-b.	Student will have a List of instances of Enrollment that it manages so that the Student instance “knows” 
-    all Sections that they are enrolled in.
-c.	Section will also have a List of instances of Enrollment so that Section “knows” who all the students 
-    are who are enrolled in that Section.
-d.	In the sample code, youll see a method on Student called add_major that populates the StudentMajor class 
-    when a student declares a new Major.  A similar function: add_student appears in Major.  
-    You will need to do the same for Student and Section to allow for each of those to maintain the Many to Many between them.
-e.	Be careful that the primary key of Enrollment is 
-        {student_id, department_abbreviation, course_number, section_number, section_year, semester}. 
-         I will understand if you decide at this point to add a surrogate to Section.
-
-'''
-
 class Enrollment(Base):
     __tablename__ = "enrollments"  # Give SQLAlchemy th name of the table.
-    # Primary keys 
-
+    # Primary keys - all migrating foreign keys I guess...
+    """Primary keys:{student_id, department_abbreviation, course_number, section_number, section_year, semester} """
+    studentID: Mapped[int}: Mapped[int] = mapped_column('student_id', primary_key=True)
+    departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation', primary_key=True)
+    courseNumber: Mapped[int] = mapped_column('course_number', primary_key=True)
+    sectionNumber: Mapped[int] = mapped_column('section_number', Integer, nullable=False, primary_key=True)
+    semester: Mapped[str] = mapped_column('semester', String(10), nullable=False, primary_key=True)
+    sectionYear: Mapped[int] = mapped_column('section_year', Integer, nullable=False, primary_key=True)
     # Define relationships 
-    student: Mapped["Student"] = relationship(back_populates="enrollments")  # 0 student many enrollments
-    sections: Mapped[List["Section"]] = relationship(back_populates="enrollment") # many sections zero enrollments
+    students: Mapped[List["Student"]] = relationship(back_populates="enrollments")  
+    sections: Mapped[List["Section"]] = relationship(back_populates="enrollments") 
 
+    # FK constraint makes sure that no student enrolls in the same course more than once the same semester
     __table_args__ = (
-        ForeignKeyConstraint([departmentAbbreviation, courseNumber, sectionYear, semester, student_id], 
-                             [Section.departmentAbbreviation, Section.courseNumber, Section.semester, Student.student_id])
+        ForeignKeyConstraint([departmentAbbreviation, courseNumber, sectionYear, semester, studentID], 
+                             [Section.departmentAbbreviation, Section.courseNumber, Section.semester, Student.studentID])
     )
 
-    def __init__(self, section: Section, student: Student ):
+    def __init__(self, section: Section, student: Student):
         self.set_section(section)
         self.set_student(section)
-
             
-    ## TODO add setters for student and section, fix str
-    def __str__(self):
-        return f"Student ID: {self.studentID} name: {self.lastName}, {self.firstName} e-mail: {self.email}"
+    def set_student(self, student):
+        self.student = student
+        self.studentID = student.studentID
+    def set_section(self, section):
+        self.section = section
+        self.departmentAbbreviation = section.departmentAbbreviation
+        self.courseNumber = section.courseNumber
+        self.sectionNumber = section.sectionNumber
+        self.semester = section.semester
+        self.sectionYear = section.sectionYear
