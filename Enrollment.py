@@ -24,16 +24,18 @@ class Enrollment(Base):
     
     __table_args__ = (
         # unique constraint makes sure that no student enrolls in the same course more than once the same semester
-        UniqueConstraint(
-            'studentID', 'departmentAbbreviation', 'courseNumber', 'sectionNumber', 'semester', 
-            'sectionYear', name = "enrollment_uk_01"
-        ),
         # All values in this class are literally from sections and students so this is the meat of it
         ForeignKeyConstraint(
             ['departmentAbbreviation', 'courseNumber', 'sectionYear', 'semester', 'studentID'], 
-            ['sections.departmentAbbreviation', 'sections.courseNumber', 'sectionYear','sections.semester', 'students.studentID']
+            ['sections.departmentAbbreviation', 'sections.courseNumber', 'sections.semester', 'students.studentID']
         )
     )
+    '''
+    UniqueConstraint(
+        'studentID', 'departmentAbbreviation)', 'courseNumber', 'sectionNumber', 'semester', 
+        'sectionYear', name = "enrollment_uk_01"
+    ),
+    '''
 
     # Constructor 
     def __init__(self, section, student):
