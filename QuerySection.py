@@ -1,6 +1,6 @@
 from Section import Section
 from QueryCourse import select_course
-
+from db_connection import Session
 def add_section(session: Session):
     """
     Prompt the user for the information for a new section and validate
