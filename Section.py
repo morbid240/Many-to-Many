@@ -11,6 +11,7 @@ from orm_base import Base
 from db_connection import engine
 from sqlalchemy import UniqueConstraint, ForeignKeyConstraint, CheckConstraint
 from sqlalchemy import String, Integer, Time
+from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from sqlalchemy import Table
 from constants import START_OVER, REUSE_NO_INTROSPECTION, INTROSPECT_TABLES
