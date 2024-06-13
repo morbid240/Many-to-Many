@@ -5,8 +5,8 @@ from IntrospectionFactory import IntrospectionFactory
 from db_connection import engine, Session
 from orm_base import metadata
 # just getting functions from modules
-from QueryDepartment import add_department, select_department, delete_department, list_departments, list_department_courses
-from QueryCourse import add_course, select_course, delete_course, list_courses, move_course_to_new_department
+from QueryDepartment import add_department, select_department, delete_department, list_department, list_department_course
+from QueryCourse import add_course, select_course, delete_course, list_course, move_course_to_new_department
 from QuerySection import add_section, select_section, delete_section
 
 
