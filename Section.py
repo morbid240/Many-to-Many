@@ -35,7 +35,7 @@ class Section(Base):
     # Relationships
     # 1 course -> * sections bidirectional
     course: Mapped["Course"] = relationship(back_populates="sections") 
-    students: Mapped[List["Enrollment"]] = relationship(back_populates = "sections")]
+    students: Mapped[List["Enrollment"] = relationship(back_populates = "sections")]
     # Constraints
     __table_args__ = (
         # Candidate key 1: room cannot be occupied by more than one section at the same time, 
