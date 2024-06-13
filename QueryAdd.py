@@ -270,6 +270,8 @@ def boilerplate(sess: Session):
     :return:        None
     """
     department: Department = Department('CECS', 'Computer Engineering Computer Science')
+    course: Course = Course(department, 323, 'Database Fundamentals', 'Intro to databases', 3)
+    section: Section = Section(course,  1, 'Summer I', 2024, 'VEC', 405, 'MW', '09:00:00', 'Brown')
     major1: Major = Major(department, 'Computer Science', 'Fun with blinking lights')
     major2: Major = Major(department, 'Computer Engineering', 'Much closer to the silicon')
     student1: Student = Student('Brown', 'David', 'david.brown@gmail.com')
@@ -279,6 +281,8 @@ def boilerplate(sess: Session):
     student2.add_major(major1)
     student2.add_major(major2)
     sess.add(department)
+    sess.add(course)
+    sess.add(section)
     sess.add(major1)
     sess.add(major2)
     sess.add(student1)

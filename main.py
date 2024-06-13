@@ -4,15 +4,9 @@ from menu_definitions import menu_main, add_menu, delete_menu, list_menu, debug_
 from IntrospectionFactory import IntrospectionFactory
 from db_connection import engine, Session
 from orm_base import metadata
-# Note that until you import your SQLAlchemy declarative classes, such as Student, Python
-# will not execute that code, and SQLAlchemy will be unaware of the mapped table.
-from Department import Department
-from Major import Major
-from Student import Student
-from StudentMajor import StudentMajor
 from Option import Option
 from Menu import Menu
-from pprint import pprint
+
 
 """
      Got tired of scrolling up and down for functions, 
@@ -54,7 +48,7 @@ def list_objects(sess: Session):
         list_action = list_menu.menu_prompt()
         exec(list_action)
 
-    
+
 
 if __name__ == '__main__':
     print('Starting off')

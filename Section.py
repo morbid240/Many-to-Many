@@ -64,6 +64,7 @@ class Section(Base):
         )
     )
     
+    
     def __init__(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
                      building: str, room: int, schedule: str, startTime: Time, instructor: str):
         self.set_course(course)
