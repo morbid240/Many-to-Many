@@ -53,43 +53,33 @@ class Section(Base):
     
     def __init__(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
                      building: str, room: int, schedule: str, startTime: Time, instructor: str):
-            self.init(course, sectionNumber, semester, sectionYear,  
-                     building, room, schedule, startTime, instructor)
+        self.set_course(course)
+        self.sectionNumber = sectionNumber
+        self.semester = semester
+        self.sectionYear = sectionYear
+        self.building = building
+        self.room = room
+        self.schedule = schedule
+        self.startTime = startTime
+        self.instructor = instructor
 
 
-'''
-    Init outside of class
-'''
-def init(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
-                     building: str, room: int, schedule: str, startTime: Time, instructor: str):
-    self.set_course(course)
-    self.sectionNumber = sectionNumber
-    self.semester = semester
-    self.sectionYear = sectionYear
-    self.building = building
-    self.room = room
-    self.schedule = schedule
-    self.startTime = startTime
-    self.instructor = instructor
-def set_course(self, course: Course):
-    """
-    Set the course for this section using department abbreviation and course number.
-    :param departmentAbbreviation: The department abbreviation of the course.
-    :param courseNumber: The course number.
-    :return: None
-    """
-    self.course = course
-    self.departmentAbbreviation = course.departmentAbbreviation
-    self.courseNumber = course.courseNumber
+    def set_course(self, course: Course):
+        """
+        Set the course for this section using department abbreviation and course number.
+        :param departmentAbbreviation: The department abbreviation of the course.
+        :param courseNumber: The course number.
+        :return: None
+        """
+        self.course = course
+        self.departmentAbbreviation = course.departmentAbbreviation
+        self.courseNumber = course.courseNumber
+        
+    def __str__(self):
+        return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
+                Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTime}\nInstructor: {self.instructor}"
     
-def __str__(self):
-    return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
-            Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTime}\nInstructor: {self.instructor}"
 
-# Add the __init__, set_course, and __str__ methods to the Section class
-setattr(Section, 'init', init)
-setattr(Section, 'set_course', set_course)
-setattr(Section, '__str__', __str__)
 
     
 
