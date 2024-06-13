@@ -3,7 +3,7 @@ from Course import Course
 from Student import Student
 from Major import Major
 from StudentMajor import StudentMajor
-from QuerySelect import select_department
+from QuerySelect import select_department, select_student
 from db_connection import Session
 
 
@@ -32,7 +32,8 @@ def list_course(sess: Session):
     for course in courses:
         print(course)
 
-
+def list_section(session: Session):
+    
 def list_department_courses(sess):
     department = select_department(sess)
     dept_courses: [Course] = department.get_courses()
