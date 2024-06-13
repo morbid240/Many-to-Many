@@ -7,6 +7,7 @@ from StudentMajor import StudentMajor
 from datetime import datetime
 
 
+
 class Student(Base):
     """An individual who may or may not be enrolled at the university, who
     enrolls in courses toward some educational objective.  That objective
@@ -26,6 +27,9 @@ class Student(Base):
     deletion in the association table to go along with it."""
     majors: Mapped[List["StudentMajor"]] = relationship(back_populates="student",
                                                         cascade="all, save-update, delete-orphan")
+    # Student keeps a list of what sections their enrolled in. Makes sense
+    sections: Mapped[List["Enrollments"]] = relationship(back_populates = "student",
+                                                        cascade="all, save-update, delete-orphan")
     # __table_args__ can best be viewed as directives that we ask SQLAlchemy to
     # send to the database.  In this case, that we want two separate uniqueness
     # constraints (candidate keys).
@@ -36,6 +40,7 @@ class Student(Base):
         self.lastName = lastName
         self.firstName = firstName
         self.email = email
+
 
     def add_major(self, major):
         """Add a new major to the student.  We are not actually adding a major directly
@@ -52,17 +57,7 @@ class Student(Base):
 #        major.students.append(student_major)                # Add this Student to the supplied Major.
 #        self.majors.append(student_major)                   # Add the supplied Major to this student.
 
-    def add_enrollment(self, enrollment):
-        """Add a new enrollment to the student. """
-        # Check if enrolled already 
-        for next_enrollment in self.enrollments:
-            if next_enrollment.enrollment == enrollment:
-                return  # already enrolled 
-        # Otherwise create instance of enrollment
-        
-    def remove_enrollment(self, enrollment):
-        """Remove enrollment from list of enrollments student is in. aka dropping or finishing 
-        or if the term is up or whatever"""
+
     def remove_major(self, major):
         """
         Remove a major from the list of majors that a student presently has declared.
@@ -76,6 +71,19 @@ class Student(Base):
             if next_major.major == major:
                 self.majors.remove(next_major)
                 return
+
+
+    def add_section(self, section):
+        """adding a section to a list of sections studet is enrolled in currently"""
+        # check if already in that section
+        for next_section in self.sections:
+            if next_section.section == section:
+                return # Student already enrolled in section
+        #otherwise ccreate new instance of enrollment to connect student to section
+        
+    def delete_section(self, section):
+        """delete from local list"""
+    
 
     def __str__(self):
         return f"Student ID: {self.studentID} name: {self.lastName}, {self.firstName} e-mail: {self.email}"
