@@ -6,7 +6,7 @@ from Major import Major
 from db_connection import Session
 
 
-def select_department(session: Session) -> Department:
+def select_department(sess: Session) -> Department:
     """
     Prompt the user for a specific department by the department abbreviation.
     :param sess:    The connection to the database.
