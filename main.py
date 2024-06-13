@@ -31,7 +31,7 @@ from QueryList import list_course, list_department, list_department_courses, lis
 # New functions made imported here
 from QueryList import list_student_enrollment, list_enrolled_student
 from QueryAdd import add_student_section, add_section_student
-from QueryDelete import delete_student_section, delete_section_student
+from QueryDelete import delete_student_enrollment, delete_enrolled_student
 
 def add(sess: Session):
     add_action: str = ''
