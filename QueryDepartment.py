@@ -77,7 +77,7 @@ def list_departments(session: Session):
         print(department)
 
 
-def list_department_courses(sess):
+def list_department_courses(sess: Session):
     department = select_department(sess)
     dept_courses: [Course] = department.get_courses()
     print("Course for department: " + str(department))
