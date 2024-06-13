@@ -23,16 +23,15 @@ from pprint import pprint
     
     tried making a database manager module but had problems with scope  
 """
-'''
-from QueryAdd import add_department, add_course, add_major, add_section, add_major_student, add_student, add_student_major
+
+from QueryAdd import add_department, add_course, add_major, add_section, add_major_student, add_student, add_student_major, boilerplate
 from QuerySelect import select_course, select_department, select_major, select_section, select_student, select_student_from_list
 from QueryDelete import delete_course, delete_department, delete_major_student, delete_section, delete_student, delete_student_major
 from QueryList import list_course, list_department, list_department_courses, list_major, list_major_student, list_student, list_student_major
-'''
-from QueryAdd import QueryAdd
-from QuerySelect import QuerySelect
-from QueryDelete import QueryDelete
-from QueryList import QueryList
+# New functions made imported here
+from QueryList import list_student_enrollment, list_enrolled_student
+from QueryAdd import add_student_section, add_section_student
+from QueryDelete import delete_student_section, delete_section_student
 
 def add(sess: Session):
     add_action: str = ''
