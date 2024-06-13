@@ -1,7 +1,8 @@
 '''
 Malcolm Roddy
 CECS 323 Section 01
-Simple one to many SQLAlchemy
+Many to Many
+Due date: 06/14/2024
 This defines the Section table and its 
 relationship to Course along with its constraints
 '''
@@ -25,7 +26,6 @@ class Section(Base):
     with student via enrollment lookup table
     """
     __tablename__ = "sections" # The physical name of this table
-    
     # PRIMARY KEYS
     departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation', primary_key=True)
     courseNumber: Mapped[int] = mapped_column('course_number', primary_key=True)
@@ -36,9 +36,8 @@ class Section(Base):
     building: Mapped[str] = mapped_column('building', String(6), nullable=False)
     room: Mapped[int] = mapped_column('room', Integer, nullable=False)
     schedule: Mapped[str] = mapped_column('schedule', String(6)) 
-    startTime: Mapped[Time] = mapped_column('start_time', Time)
+    startTime: Mapped[Time] = mapped_column('start_time', Time) # How the hell does this work for input??
     instructor: Mapped[str] = mapped_column('instructor', String(80), nullable=False)
-    
     # Relationships
     course: Mapped["Course"] = relationship(
         # 1 course -> * sections bidirectional
@@ -48,7 +47,6 @@ class Section(Base):
         # Many to many with sections throuigh Enrollments
         "Enrollment", back_populates = "section", cascade="all, save-update, delete-orphan"
     )
-    
     __table_args__ = (
         # Candidate key 1: room cannot be occupied by more than one section at the same time, 
         # Candidate key 2: instructor can't teach two sections at the same time
@@ -81,10 +79,9 @@ class Section(Base):
 
     def set_course(self, course: Course):
         """
-        Set the course for this section using department abbreviation and course number.
-        :param departmentAbbreviation: The department abbreviation of the course.
-        :param courseNumber: The course number.
-        :return: None
+        This basically ensures we have a course regardless of constraints
+        of said course, otherwise it complains about creating a section object
+        course is made which it depends on. SQL alchemy takes care of this
         """
         self.course = course
         self.departmentAbbreviation = course.departmentAbbreviation
