@@ -1,5 +1,6 @@
 from Department import Department
 from Course import Course
+from Section import Section 
 from Student import Student
 from Major import Major
 from StudentMajor import StudentMajor
