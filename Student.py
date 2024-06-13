@@ -4,6 +4,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List                 # Use this for the list of Majors that this student has
 from StudentMajor import StudentMajor
+from Enrollment import Enrollment
 from datetime import datetime
 
 
@@ -25,11 +26,13 @@ class Student(Base):
     to disassociate.  But to get that to work in the database, we need to configure
     the relationship such that breaking the association at this end propagates a 
     deletion in the association table to go along with it."""
+    # Reelationships
     majors: Mapped[List["StudentMajor"]] = relationship(back_populates="student",
                                                         cascade="all, save-update, delete-orphan")
     # Student keeps a list of what sections their enrolled in. Makes sense
-    sections: Mapped[List["Enrollments"]] = relationship(back_populates = "student",
+    sections: Mapped[List["Enrollment"]] = relationship(back_populates = "student",
                                                         cascade="all, save-update, delete-orphan")
+    
     # __table_args__ can best be viewed as directives that we ask SQLAlchemy to
     # send to the database.  In this case, that we want two separate uniqueness
     # constraints (candidate keys).
@@ -79,11 +82,18 @@ class Student(Base):
         for next_section in self.sections:
             if next_section.section == section:
                 return # Student already enrolled in section
-        #otherwise ccreate new instance of enrollment to connect student to section
-        
+        #   otherwise create new instance of enrollment to connect student to section
+        student_enrolled = Enrollment(self, section, self.student)
+        section.students.append(student_enrolled) # add to section list
+        self.sections.append(student_enrolled)  # add to student list
+
+
     def delete_section(self, section):
         """delete from local list"""
-    
+        for next_section in self.sections:
+            if next_section.section == section:
+                self.sections.remove(next_section)
+                return 
 
     def __str__(self):
         return f"Student ID: {self.studentID} name: {self.lastName}, {self.firstName} e-mail: {self.email}"
