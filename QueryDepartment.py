@@ -1,6 +1,6 @@
 from Department import Department 
 from Course import Course
-from db_connection import Session
+# from db_connection import Session
 def add_department(session: Session):
     """
     Prompt the user for the information for a new department and validate
@@ -63,7 +63,7 @@ def delete_department(session: Session):
     else:
         session.delete(department)
 
-def list_department(session: Session):
+def list_departments(session: Session):
     """
     List all departments, sorted by the abbreviation.
     :param session:     The connection to the database.
