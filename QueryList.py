@@ -3,7 +3,7 @@ from Course import Course
 from Student import Student
 from Major import Major
 from StudentMajor import StudentMajor
-from QuerySelect import select_department, select_student
+from QuerySelect import select_department, select_student, select_major
 from db_connection import Session
 
 
