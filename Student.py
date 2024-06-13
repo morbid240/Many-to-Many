@@ -23,7 +23,6 @@ class Student(Base):
     majors: Mapped[List["StudentMajor"]] = relationship(
         "StudentMajor", back_populates="student", cascade="all, save-update, delete-orphan"
     )
-    
     sections: Mapped[List["Enrollment"]] = relationship(
         "Enrollment", back_populates="student", cascade="all, save-update, delete-orphan"
     )
