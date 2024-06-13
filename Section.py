@@ -6,7 +6,6 @@ This defines the Section table and its
 relationship to Course along with its constraints
 '''
 
-
 from orm_base import Base
 from db_connection import engine
 from sqlalchemy import UniqueConstraint, ForeignKeyConstraint, CheckConstraint
@@ -15,9 +14,7 @@ from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from sqlalchemy import Table
 from constants import START_OVER, REUSE_NO_INTROSPECTION, INTROSPECT_TABLES
-
 from Course import Course
-
 
 class Section(Base):
     __tablename__ = "sections" # The physical name of this table
@@ -34,9 +31,10 @@ class Section(Base):
     startTime: Mapped[Time] = mapped_column('start_time', Time) # Not mandatory either?
     instructor: Mapped[str] = mapped_column('instructor', String(80), nullable=False)
     # Relationships
-    # 1 course -> * sections bidirectional
-    course: Mapped["Course"] = relationship(back_populates="sections") 
-    students: Mapped[List["Enrollment"] = relationship(back_populates = "sections")
+    course: Mapped["Course"] = relationship(back_populates="sections") # 1 course -> * sections bidirectional
+    students: Mapped[List["Enrollment"]]= relationship(    # Many to many with sections throuigh Enrollments
+        "Enrollment", back_populates = "sections", cascade="all, save-update, delete-orphan"
+    )
     # Constraints
     __table_args__ = (
         # Candidate key 1: room cannot be occupied by more than one section at the same time, 
@@ -48,9 +46,10 @@ class Section(Base):
         CheckConstraint(schedule.in_(["MW", "TuTh", "MWF", "F", "S"])),
         CheckConstraint(building.in_(["VEC", "ECS", "EN2", "EN3", "EN4", "ET", "SSPA"])),
         # Course (Parent) contains two primary keys. Referencing mapped_column and not attribute here
-        ForeignKeyConstraint([departmentAbbreviation, courseNumber], 
-                             [Course.departmentAbbreviation, Course.courseNumber])
-    )
+        ForeignKeyConstraint(
+            [departmentAbbreviation, courseNumber], 
+            [Course.departmentAbbreviation, Course.courseNumber])
+        )
     
     def __init__(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
                      building: str, room: int, schedule: str, startTime: Time, instructor: str):
@@ -75,7 +74,8 @@ class Section(Base):
         self.course = course
         self.departmentAbbreviation = course.departmentAbbreviation
         self.courseNumber = course.courseNumber
-        
+
+    
     def __str__(self):
         return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
                 Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTime}\nInstructor: {self.instructor}"
