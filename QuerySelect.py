@@ -16,7 +16,7 @@ def select_department(sess: Session) -> Department:
     abbreviation: str = ''
     while not found:
         abbreviation = input("Enter the department abbreviation--> ")
-        abbreviation_count: int = session.query(Department). \
+        abbreviation_count: int = sess.query(Department). \
             filter(Department.abbreviation == abbreviation).count()
         found = abbreviation_count == 1
         if not found:
@@ -24,6 +24,7 @@ def select_department(sess: Session) -> Department:
     return_department: Department = sess.query(Department). \
         filter(Department.abbreviation == abbreviation).first()
     return return_department
+
 
 
 def select_course(sess: Session) -> Course:
