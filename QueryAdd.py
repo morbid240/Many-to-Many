@@ -42,7 +42,7 @@ def add_department(session: Session):
     session.add(new_department)
 
 
-def add_course(session: Session):
+def add_course(sess: Session):
     """
     This demonstrates how to use the utilities in SQLAlchemy Utilities for checking
     all the uniqueness constraints of a table in one method call.  The user
