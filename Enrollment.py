@@ -23,11 +23,6 @@ class Enrollment(Base):
     student: Mapped["Student"] = relationship("Student", back_populates="sections") 
     
     __table_args__ = (
-        # unique constraint makes sure that no student enrolls in the same course more than once the same semester
-        UniqueConstraint(
-            'studentID', 'departmentAbbreviation', 'courseNumber', 'sectionNumber', 'semester', 
-            'sectionYear', name="enrollment_uk_01"
-        ),
         # All values in this class are literally from sections and students so this is the meat of it
         ForeignKeyConstraint(
             ['departmentAbbreviation', 'courseNumber', 'sectionYear', 'semester', 'studentID'], 
