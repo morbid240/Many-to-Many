@@ -1,10 +1,14 @@
+from db_connection import Session
+
 from Section import Section
 from Department import Department
 from Course import Course
 from Student import Student
+from Major import Major
+from Enrollment import Enrollment
 from StudentMajor import StudentMajor
-from QuerySelect import select_course, select_department, select_student
-from db_connection import Session
+
+from QuerySelect import select_course, select_department, select_student, select_section, select_major
 from SQLAlchemyUtilities import check_unique
 
 def add_department(session: Session):
@@ -201,6 +205,34 @@ def add_major_student(sess: Session):
     sess.flush()
 
 
+    def add_student_section(session: Session):
+        """Enroll a student in a section"""
+        section: Section = select_section(session)
+        student: Student = select_student(session)
+
+        student_section_count: int = session.query(Enrollment).filter(
+            # Cant be enrolled in same section twice
+            # kinda shitty but using all the PKs not surrogate
+            Enrollment.studentID == student.studentID,
+            Enrollment.sectionYear== section.sectionYear,
+            Enrollment.semester == section.semester,
+            Enrollment.courseNumber == section.courseNumber,
+            Enrollment.departmentAbbreviation==section.departmentAbbreviation
+
+        ).count()
+
+        unique_student_section: bool = student_section_count == 0
+        while not unique_student_section:
+            print("That student is already enrolled in that section. Try again.")
+            student = select_student(session)
+            section = select_section(session)
+        session.add_student(student)
+        session.flush()
+
+        
+        
+
+    
 
 
 
