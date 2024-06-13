@@ -42,7 +42,7 @@ def add_department(session: Session):
     session.add(new_department)
 
 
-def add_course(sess: Session):
+def add_course(session: Session):
     """
     This demonstrates how to use the utilities in SQLAlchemy Utilities for checking
     all the uniqueness constraints of a table in one method call.  The user
@@ -56,7 +56,7 @@ def add_course(sess: Session):
     :return:        None
     """
     print("Which department offers this course?")
-    department: Department = select_department(sess)
+    department: Department = select_department(session)
     description: str = input('Please enter the course description-->')
     units: int = int(input('How many units for this course-->'))
     violation = True  # Flag that we still have to prompt for fresh values
@@ -113,7 +113,7 @@ def add_major(session: Session):
     :return:        None
     """
     print("Which department offers this major?")
-    department: Department = select_department(sess)
+    department: Department = select_department(session)
     unique_name: bool = False
     name: str = ''
     while not unique_name:
@@ -158,7 +158,7 @@ def add_student(session: Session):
     session.add(new_student)
 
 
-def add_student_major(sess: Session):
+def add_student_major(session: Session):
     student: Student = select_student(sess)
     major: Major = select_major(sess)
     student_major_count: int = sess.query(StudentMajor).filter(StudentMajor.studentId == student.studentID,
@@ -166,8 +166,8 @@ def add_student_major(sess: Session):
     unique_student_major: bool = student_major_count == 0
     while not unique_student_major:
         print("That student already has that major.  Try again.")
-        student = select_student(sess)
-        major = select_major(sess)
+        student = select_student(session)
+        major = select_major(session)
     student.add_major(major)
     """The student object instance is mapped to a specific row in the Student table.  But adding
     the new major to its list of majors does not add the new StudentMajor instance to this session.
