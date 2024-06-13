@@ -1,6 +1,8 @@
 from db_connection import Session
 from Course import Course 
-from Department import select_department
+from Department import Department
+from DepartmentQuery import select_department
+
 def add_course(session: Session):
     """
     This demonstrates how to use the utilities in SQLAlchemy Utilities for checking
