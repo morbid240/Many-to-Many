@@ -11,7 +11,7 @@ class Enrollment(Base):
     """
     __tablename__ = "enrollments"  # Give SQLAlchemy th name of the table.
     # Primary keys - all migrating foreign keys I guess...
-    studentID: Mapped[int] = mapped_column('student_id', Integer primary_key=True)
+    studentID: Mapped[int] = mapped_column('student_id', Integer, primary_key=True)
     departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation', String(10), primary_key=True)
     courseNumber: Mapped[int] = mapped_column('course_number', Integer, primary_key=True)
     sectionNumber: Mapped[int] = mapped_column('section_number', Integer, nullable=False, primary_key=True)
