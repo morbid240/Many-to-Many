@@ -14,20 +14,27 @@ from Option import Option
 from Menu import Menu
 from pprint import pprint
 
-from QueryAdd import add_department, add_course, add_major, add_section, add_major_student, add_student, add_student_major
-from QuerySelect import select_course, select_department, select_major, select_section, select_student, select_student_from_list
-from QueryDelete import delete_course, delete_department, delete_major_student, delete_section, delete_student, delete_student_major
-from QueryList import list_course, list_department, list_department_courses, list_major, list_major_student, list_student, list_student_major
+"""
+     Got tired of scrolling up and down for functions, 
+     figured out a way for encapuslation. Im still a bit 
+     confused agout scope here, but it seems like the session
+     object is shared amongst all the functions the same way, 
+     with them also being accessible here. 
+    
+    tried making a database manager module but had problems with scope  
+"""
+from QueryAdd import QueryAdd
+from QuerySelect import QuerySelect 
+from QueryDelete import QueryDelete 
+from QueryList import QueryList 
 
-from DatabaseManager import add, delete, list_objects, boilerplate, session_rollback
-from pprint import pprint
-
+"""
 from QueryAdd import add_major
 from QueryAdd import add_department, add_course, add_major, add_section, add_major_student, add_student, add_student_major
 from QuerySelect import select_course, select_department, select_major, select_section, select_student, select_student_from_list
 from QueryDelete import delete_course, delete_department, delete_major_student, delete_section, delete_student, delete_student_major
 from QueryList import list_course, list_department, list_department_courses, list_major, list_major_student, list_student, list_student_major
-
+"""
 
 def add(sess: Session):
     add_action: str = ''
@@ -48,7 +55,6 @@ def list_objects(sess: Session):
     while list_action != list_menu.last_action():
         list_action = list_menu.menu_prompt()
         exec(list_action)
-
 
 
 def boilerplate(sess: Session):
