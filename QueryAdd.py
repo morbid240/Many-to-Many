@@ -229,7 +229,7 @@ def add_student_section(session: Session):
         print("That student is already enrolled in that section. Try again.")
         student = select_student(session)
         section = select_section(session)
-    session.add_student(student)
+    section.add_student(student)
     session.flush()
 
 
