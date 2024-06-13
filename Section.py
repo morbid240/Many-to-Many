@@ -14,7 +14,9 @@ from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from sqlalchemy import Table
 from constants import START_OVER, REUSE_NO_INTROSPECTION, INTROSPECT_TABLES
+
 from Course import Course
+from Enrollment import Enrollment
 
 class Section(Base):
     """
