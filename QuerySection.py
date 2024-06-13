@@ -1,6 +1,7 @@
 from Section import Section
 from QueryCourse import select_course
 from db_connection import Session
+
 def add_section(session: Session):
     """
     Prompt the user for the information for a new section and validate
@@ -32,7 +33,7 @@ def add_section(session: Session):
     session.add(section)
 
 
-def delete_section(session):
+def delete_section(session: Session):
     """
     Prompt the user to select a section by its attributes, then delete it.
     :param session: The connection to the database.
@@ -41,10 +42,9 @@ def delete_section(session):
     print("Deleting a section")
     section = select_section(session)
     session.delete(section)
+    
 
-
-
-def select_section(sess):
+def select_section(session: Session):
     """
     Select a section by its attributes.
     :param sess: The connection to the database.
