@@ -1,4 +1,5 @@
 from db_connection import Session
+from pprint import pprint
 
 from Section import Section
 from Department import Department
