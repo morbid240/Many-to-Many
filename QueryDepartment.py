@@ -1,6 +1,6 @@
 from Department import Department 
 from Course import Course
-
+from db_connection import Session
 
 def add_department(session: Session):
     """
