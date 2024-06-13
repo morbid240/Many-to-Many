@@ -31,7 +31,8 @@ add_menu = Menu('add', 'Please indicate what you want to add:', [
     Option("Student", "add_student(sess)"),
     Option("Student to Major", "add_student_major(sess)"),
     Option("Major to Student", "add_major_student(sess)"),
-    Option("Enroll a Student in a Section", "add_student_section(sess)"),
+    Option("Student to Section", "add_student_section(sess)"),
+    Option("Section to Student", "add_section_student(sess)"),
     Option("Exit", "pass")
 ])
 

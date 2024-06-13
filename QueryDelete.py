@@ -14,7 +14,7 @@ def delete_department(session: Session):
     :return:        None
     """
     print("deleting a department")
-    department = select_department(session)
+    department: Department = select_department(session)
     n_courses = session.query(Course).filter(Course.departmentAbbreviation == department.abbreviation).count()
     if n_courses > 0:
         print(f"Sorry, there are {n_courses} courses in that department.  Delete them first, "
@@ -30,8 +30,8 @@ def delete_course(session: Session):
     :return: None
     """
     print("Deleting a course")
-    course = select_course(session)
-    if 0 < session.query(Sections).filter(Section.courseNumber == course.courseNumber).count():
+    course: Course = select_course(session)
+    if 0 < session.query(Section).filter(Section.courseNumber == course.courseNumber).count():
         print("Sections depend on this course, go delete them first and try again.")
     else:
         session.delete(course)

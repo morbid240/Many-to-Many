@@ -5,12 +5,11 @@ Many to Many SQL
 Due Date: 06/14/2024
 
 Only stuff added here: 
-    import Enrollment assoication class
-    new relationship between student and section
-    methods for adding/removing sections from the student
-    Everything else remains unchanged (I think)
+    -import Enrollment assoication class
+    -new relationship between student and section
+    -methods for adding/removing sections from the student
+Everything else remains unchanged (I think)
 """
-
 
 from orm_base import Base
 from sqlalchemy import Column, Integer, UniqueConstraint, Identity, String

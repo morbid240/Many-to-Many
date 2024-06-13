@@ -1,9 +1,24 @@
+"""
+Malcolm Roddy 
+CECS 323
+Many to Many
+Due Date: 06/14/2024
+
+This contains the association class that connects Students
+with Sections. 
+Basically a rip off from StudentMajor 
+Essentially contains only foreign keys from Student/Sections
+
+Todo: store data time instance 
+"""
+
 from sqlalchemy import Column, Integer, String, ForeignKeyConstraint, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from orm_base import Base
-"""tha k fuck it didnt delete""" 
+from datetime import datetime
+
+
 class Enrollment(Base):
-    """Association class between students and sections."""
     __tablename__ = "enrollments"
     
     # Composite primary key
@@ -34,6 +49,12 @@ class Enrollment(Base):
         UniqueConstraint('student_id', 'department_abbreviation', 'course_number', 'semester', name='uq_student_course_semester')
     )
     
+    
+    """Set methods to create student/section without constraints since it depends on them 
+    just like how Course needed a set_department to setup column mapping for FK
+    Since this class has only FK attributes, I assume we only take section and student as arguments to 
+    fill out columns
+    """
     def __init__(self, section, student):
         self.set_section(section)
         self.set_student(student)
