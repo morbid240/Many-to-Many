@@ -34,7 +34,7 @@ def list_course(sess: Session):
 
 def list_section(session: Session):
     
-def list_department_courses(sess):
+def list_department_courses(session: Session):
     department = select_department(sess)
     dept_courses: [Course] = department.get_courses()
     print("Course for department: " + str(department))
