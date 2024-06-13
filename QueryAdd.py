@@ -1,6 +1,6 @@
 from db_connection import Session
 from pprint import pprint
-
+from sqlalchemy import Time
 from Section import Section
 from Department import Department
 from Course import Course
