@@ -88,17 +88,35 @@ class Section(Base):
         self.departmentAbbreviation = course.departmentAbbreviation
         self.courseNumber = course.courseNumber
 
-
-    def add_student(self, student: Student):
-        """
+    
+    def add_student(self, student):
+        """    
         Adds a student to the list of students enrolled in the section
+        Note: not creating a student but rather keeping track of its instance
+        association 
+        This is basically a rip off from add_major method
         """
+        # Make sure that this section does not already have this Student.
+        for next_student in self.students:
+            if next_student.student == student:
+                return              # This student is already in this major.
+        # create the necessary Association Class instance that connects This section to
+        # the supplied student.
+        student_enrollment = Enrollment(student, self, datetime.now())
+#        student.majors.append(student_major)        # Add this new junction entry to the Student
+#        self.students.append(student_major)         # Add this new junction entry to this Major
 
     
-    def remove_student(self, student: Student):
+    def remove_student(self, student):
         """
         Removes a student from the enrolled students in the section
+        Assuming you found the student in the section 
         """
+        for next_student in self.students:
+            if next_student.student == student:
+                # Remove this student from the section's list of students
+                self.students.remove(next_student)
+                return
 
         
     def __str__(self):
