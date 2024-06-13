@@ -209,7 +209,9 @@ def add_major_student(sess: Session):
 
 
 def add_student_section(session: Session):
-    """Enroll a student in a section"""
+    """Enroll a student in a section
+    AKA adds a student to the section list of enrolled students
+    """
     section: Section = select_section(session)
     student: Student = select_student(session)
 
@@ -221,7 +223,6 @@ def add_student_section(session: Session):
         Enrollment.semester == section.semester,
         Enrollment.courseNumber == section.courseNumber,
         Enrollment.departmentAbbreviation==section.departmentAbbreviation
-
     ).count()
 
     unique_student_section: bool = student_section_count == 0
@@ -230,6 +231,32 @@ def add_student_section(session: Session):
         student = select_student(session)
         section = select_section(session)
     section.add_student(student)
+    session.flush()
+
+
+def add_section_student(session: Session):
+    """Enroll a student in a section
+    AKA add a section to the student's list of enrolled sections
+    """
+    student: Student = select_student(session)
+    section: Section = select_section(session)
+
+    student_section_count: int = session.query(Enrollment).filter(
+        # Cant be enrolled in same section twice
+        # kinda shitty but using all the PKs not surrogate
+        Enrollment.studentID == student.studentID,
+        Enrollment.sectionYear== section.sectionYear,
+        Enrollment.semester == section.semester,
+        Enrollment.courseNumber == section.courseNumber,
+        Enrollment.departmentAbbreviation==section.departmentAbbreviation
+    ).count()
+
+    unique_student_section: bool = student_section_count == 0
+    while not unique_student_section:
+        print("That student is already enrolled in that section. Try again.")
+        section = select_section(session)
+        student = select_student(session)
+    student.add_section(section)
     session.flush()
 
 
