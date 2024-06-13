@@ -51,6 +51,7 @@ def select_course(sess: Session) -> Course:
     return course
 
 
+
 def select_section(sess: Session):
     """
     Select a section by its attributes.
@@ -77,6 +78,7 @@ def select_section(sess: Session):
     return sess.query(Section).filter(Section.departmentAbbreviation == department_abbreviation,
             Section.courseNumber == course_number, Section.sectionNumber == section_number,
            Section.semester == semester, Section.sectionYear == section_year).first()
+
 
 def move_course_to_new_department(sess: Session):
     """
