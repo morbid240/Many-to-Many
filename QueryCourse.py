@@ -1,3 +1,4 @@
+from db_connection import Session
 from Course import Course 
 
 def add_course(session: Session):
