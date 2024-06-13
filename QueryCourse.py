@@ -35,7 +35,7 @@ def add_course(session: Session):
     session.add(course)
 
 
-def select_course(sess: Session) -> Course:
+def select_course(session: Session) -> Course:
     """
     Select a course by the combination of the department abbreviation and course number.
     Note, a similar query would be to select the course on the basis of the department
@@ -54,12 +54,12 @@ def select_course(sess: Session) -> Course:
         found = name_count == 1
         if not found:
             print("No course by that number in that department.  Try again.")
-    course = sess.query(Course).filter(Course.departmentAbbreviation == department_abbreviation,
+    course = session.query(Course).filter(Course.departmentAbbreviation == department_abbreviation,
                                        Course.courseNumber == course_number).first()
     return course
 
 
-def delete_course(session):
+def delete_course(session: Session):
     """
     Prompt the user to select a course by department abbreviation and course number, then delete it.
     :param session: The connection to the database.
@@ -74,7 +74,7 @@ def delete_course(session):
 
 
 
-def list_courses(sess: Session):
+def list_courses(session: Session):
     """
     List all courses currently in the database.
     :param sess:    The connection to the database.
@@ -87,7 +87,7 @@ def list_courses(sess: Session):
         print(course)
 
 
-def move_course_to_new_department(sess: Session):
+def move_course_to_new_department(session: Session):
     """
     Take an existing course and move it to an existing department.  The course has to
     have a department when the course is created, so this routine just moves it from
