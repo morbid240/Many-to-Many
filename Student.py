@@ -52,6 +52,17 @@ class Student(Base):
 #        major.students.append(student_major)                # Add this Student to the supplied Major.
 #        self.majors.append(student_major)                   # Add the supplied Major to this student.
 
+    def add_enrollment(self, enrollment):
+        """Add a new enrollment to the student. """
+        # Check if enrolled already 
+        for next_enrollment in self.enrollments:
+            if next_enrollment.enrollment == enrollment:
+                return  # already enrolled 
+        # Otherwise create instance of enrollment
+        
+    def remove_enrollment(self, enrollment):
+        """Remove enrollment from list of enrollments student is in. aka dropping or finishing 
+        or if the term is up or whatever"""
     def remove_major(self, major):
         """
         Remove a major from the list of majors that a student presently has declared.

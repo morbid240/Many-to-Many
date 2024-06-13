@@ -32,8 +32,9 @@ class Section(Base):
     schedule: Mapped[str] = mapped_column('schedule', String(6)) # Not mandatory?
     startTime: Mapped[Time] = mapped_column('start_time', Time) # Not mandatory either?
     instructor: Mapped[str] = mapped_column('instructor', String(80), nullable=False)
-    # Define relationships - tables populates course? bidirectional
-    course: Mapped["Course"] = relationship(back_populates="sections")
+    # Relationships
+    # 1 course -> * sections bidirectional
+    course: Mapped["Course"] = relationship(back_populates="sections") 
 
     # Constraints
     __table_args__ = (

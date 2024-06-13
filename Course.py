@@ -32,6 +32,7 @@ class Course(Base):
     relationship to department: many to one, we map course to one department
     relatiosnhip to section: one to many where we keep track of a list of sections
     for every course. '''
+    # Relationships
     department: Mapped["Department"] = relationship(back_populates="courses") # many to one
     sections: Mapped[List["Section"]] = relationship(back_populates="course") # one to many
     # Uniquness constraints, foreign keys etc
