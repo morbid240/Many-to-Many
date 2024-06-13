@@ -1,6 +1,7 @@
 from Department import Department 
 from Course import Course
-from db_connection import Session
+
+
 def add_department(session: Session):
     """
     Prompt the user for the information for a new department and validate
