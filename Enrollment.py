@@ -10,7 +10,7 @@ class Enrollment(Base):
     """Association class between students and sections."""
     __tablename__ = "enrollments"  # Give SQLAlchemy th name of the table.
     # Primary keys - all migrating foreign keys I guess...
-    studentID: Mapped[int}: Mapped[int] = mapped_column('student_id', primary_key=True)
+    studentID: Mapped[int] = mapped_column('student_id', primary_key=True)
     departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation', primary_key=True)
     courseNumber: Mapped[int] = mapped_column('course_number', primary_key=True)
     sectionNumber: Mapped[int] = mapped_column('section_number', Integer, nullable=False, primary_key=True)
@@ -42,3 +42,4 @@ class Enrollment(Base):
 
     def __str__(self):
         return f"Student {self.student} enrolled in section: {self.section}"
+
