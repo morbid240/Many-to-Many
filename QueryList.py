@@ -33,7 +33,11 @@ def list_course(sess: Session):
         print(course)
 
 def list_section(session: Session):
-    
+    sections: [Section] = list(session.query(Section).order_by(Section.sectionNumber))
+    for section in sections:
+        print(section)
+
+
 def list_department_courses(session: Session):
     department = select_department(sess)
     dept_courses: [Course] = department.get_courses()
