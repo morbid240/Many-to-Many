@@ -1,7 +1,7 @@
 from Section import Section
-from Course_Query import select_course
+from QueryCourse import select_course
 
-def add_section(session):
+def add_section(session: Session):
     """
     Prompt the user for the information for a new section and validate
     the input to make sure that we do not create any duplicates.
