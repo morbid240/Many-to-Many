@@ -96,6 +96,19 @@ def list_major_student(sess: Session):
         print(f"Student name: {stu.lastName}, {stu.firstName}, Major: {stu.name}, Description: {stu.description}")
 
 
+def list_student_enrollments(sess: Session):
+    """List all sections student is enrolled in
+    select student and list sections
+    """
+    student: Student = select_student(sess)
+    enrollments = sess.query(Student).join(Enrollments)
+
+
+def list_enrolled_students(sess: Session):
+    """List all students enrolled in a section
+    Select section and list students
+    """
+
 
 
 
