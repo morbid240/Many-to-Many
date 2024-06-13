@@ -3,28 +3,39 @@ from sqlalchemy import Column, Integer, UniqueConstraint, Identity
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKeyConstraint
-from typing import List 
 
 
 class Enrollment(Base):
-    """Association class between students and sections."""
+    """
+    Association class between students and sections.
+    """
     __tablename__ = "enrollments"  # Give SQLAlchemy th name of the table.
     # Primary keys - all migrating foreign keys I guess...
-    studentID: Mapped[int] = mapped_column('student_id', primary_key=True)
-    departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation', primary_key=True)
-    courseNumber: Mapped[int] = mapped_column('course_number', primary_key=True)
+    studentID: Mapped[int] = mapped_column('student_id', Integer primary_key=True)
+    departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation', String(10), primary_key=True)
+    courseNumber: Mapped[int] = mapped_column('course_number', Integer, primary_key=True)
     sectionNumber: Mapped[int] = mapped_column('section_number', Integer, nullable=False, primary_key=True)
     semester: Mapped[str] = mapped_column('semester', String(10), nullable=False, primary_key=True)
     sectionYear: Mapped[int] = mapped_column('section_year', Integer, nullable=False, primary_key=True)
-    # Define relationships 
-    section: Mapped["Section"] = relationship(back_populates="students")  
-    student: Mapped["Student"] = relationship(back_populates="sections") 
-    # FK constraint makes sure that no student enrolls in the same course more than once the same semester
+
+    # Define relationships. Both 'parents' contain the lists to keep track of each other
+    section: Mapped["Section"] = relationship("Section", back_populates="students")  
+    student: Mapped["Student"] = relationship("Student", back_populates="sections") 
+    
     __table_args__ = (
-        ForeignKeyConstraint([departmentAbbreviation, courseNumber, sectionYear, semester, studentID], 
-                             [section.departmentAbbreviation, section.courseNumber, section.semester, student.studentID])
+        # unique constraint makes sure that no student enrolls in the same course more than once the same semester
+        UniqueConstraint(
+            'studentID', 'departmentAbbreviation)', 'courseNumber', 'sectionNumber', 'semester', 
+            'sectionYear', name = "enrollment_uk_01"
+        ),
+        # All values in this class are literally from sections and students so this is the meat of it
+        ForeignKeyConstraint(
+            ['departmentAbbreviation', 'courseNumber', 'sectionYear', 'semester', 'studentID'], 
+            ['sections.departmentAbbreviation', 'sections.courseNumber', 'sections.semester', 'students.studentID']
+        )
     )
 
+    # Constructor 
     def __init__(self, section, student):
         self.set_section(section)
         self.set_student(section)
@@ -39,7 +50,4 @@ class Enrollment(Base):
         self.sectionNumber = section.sectionNumber
         self.semester = section.semester
         self.sectionYear = section.sectionYear
-
-    def __str__(self):
-        return f"Student {self.student} enrolled in section: {self.section}"
 
