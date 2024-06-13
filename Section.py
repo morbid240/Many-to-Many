@@ -17,7 +17,13 @@ from constants import START_OVER, REUSE_NO_INTROSPECTION, INTROSPECT_TABLES
 from Course import Course
 
 class Section(Base):
+    """
+    Section - when, where, and whom is teaching a course at a department. 
+    Associated many to one with course, and many to many
+    with student via enrollment lookup table
+    """
     __tablename__ = "sections" # The physical name of this table
+    
     # PRIMARY KEYS
     departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation', primary_key=True)
     courseNumber: Mapped[int] = mapped_column('course_number', primary_key=True)
@@ -27,15 +33,20 @@ class Section(Base):
     # Rest of columns (Non primary)
     building: Mapped[str] = mapped_column('building', String(6), nullable=False)
     room: Mapped[int] = mapped_column('room', Integer, nullable=False)
-    schedule: Mapped[str] = mapped_column('schedule', String(6)) # Not mandatory?
-    startTime: Mapped[Time] = mapped_column('start_time', Time) # Not mandatory either?
+    schedule: Mapped[str] = mapped_column('schedule', String(6)) 
+    startTime: Mapped[Time] = mapped_column('start_time', Time)
     instructor: Mapped[str] = mapped_column('instructor', String(80), nullable=False)
+    
     # Relationships
-    course: Mapped["Course"] = relationship(back_populates="sections") # 1 course -> * sections bidirectional
-    students: Mapped[List["Enrollment"]]= relationship(    # Many to many with sections throuigh Enrollments
-        "Enrollment", back_populates = "sections", cascade="all, save-update, delete-orphan"
+    course: Mapped["Course"] = relationship(
+        # 1 course -> * sections bidirectional
+        back_populates="sections"
     )
-    # Constraints
+    students: Mapped[List["Enrollment"]]= relationship(    
+        # Many to many with sections throuigh Enrollments
+        "Enrollment", back_populates = "section", cascade="all, save-update, delete-orphan"
+    )
+    
     __table_args__ = (
         # Candidate key 1: room cannot be occupied by more than one section at the same time, 
         # Candidate key 2: instructor can't teach two sections at the same time
@@ -47,9 +58,11 @@ class Section(Base):
         CheckConstraint(building.in_(["VEC", "ECS", "EN2", "EN3", "EN4", "ET", "SSPA"])),
         # Course (Parent) contains two primary keys. Referencing mapped_column and not attribute here
         ForeignKeyConstraint(
+            # Migrating FKs from course, also PKs to identify section
             [departmentAbbreviation, courseNumber], 
-            [Course.departmentAbbreviation, Course.courseNumber])
+            [Course.departmentAbbreviation, Course.courseNumber]
         )
+    )
     
     def __init__(self, course: Course, sectionNumber: int, semester: str, sectionYear: int,  
                      building: str, room: int, schedule: str, startTime: Time, instructor: str):
