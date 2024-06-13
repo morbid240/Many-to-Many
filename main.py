@@ -29,7 +29,7 @@ from QuerySelect import select_course, select_department, select_major, select_s
 from QueryDelete import delete_course, delete_department, delete_major_student, delete_section, delete_student, delete_student_major
 from QueryList import list_course, list_department, list_department_courses, list_major, list_major_student, list_student, list_student_major
 '''
-from QueryAdd import Query Add
+from QueryAdd import QueryAdd
 from QuerySelect import QuerySelect
 from QueryDelete import QueryDelete
 from QueryList import QueryList
