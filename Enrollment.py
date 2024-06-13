@@ -23,6 +23,8 @@ class Enrollment(Base):
     student: Mapped["Student"] = relationship("Student", back_populates="sections") 
     
     __table_args__ = (
+        UniqueConstraint('studentID', 'departmentAbbreviation)', 'courseNumber', 'sectionNumber', 'semester', 
+            'sectionYear', name = "enrollment_uk_01"),
         # All values in this class are literally from sections and students so this is the meat of it
         ForeignKeyConstraint(
             ['departmentAbbreviation', 'courseNumber', 'sectionYear', 'semester', 'studentID'], 
