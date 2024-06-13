@@ -27,7 +27,7 @@ class Enrollment(Base):
         # All values in this class are literally from sections and students so this is the meat of it
         ForeignKeyConstraint(
             ['departmentAbbreviation', 'courseNumber', 'sectionYear', 'semester', 'studentID'], 
-            ['sections.departmentAbbreviation', 'sections.courseNumber', 'sections.semester', 'students.studentID']
+            ['sections.departmentAbbreviation', 'sections.courseNumber', 'sections.year', 'sections.semester', 'students.studentID']
         )
     )
     '''
