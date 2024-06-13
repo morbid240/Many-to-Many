@@ -72,7 +72,7 @@ def delete_course(session):
 
 
 
-def list_course(sess: Session):
+def list_courses(sess: Session):
     """
     List all courses currently in the database.
     :param sess:    The connection to the database.
