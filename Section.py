@@ -88,7 +88,19 @@ class Section(Base):
         self.departmentAbbreviation = course.departmentAbbreviation
         self.courseNumber = course.courseNumber
 
+
+    def add_student(self, student: Student):
+        """
+        Adds a student to the list of students enrolled in the section
+        """
+
     
+    def remove_student(self, student: Student):
+        """
+        Removes a student from the enrolled students in the section
+        """
+
+        
     def __str__(self):
         return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
                 Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTime}\nInstructor: {self.instructor}"
