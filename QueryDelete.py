@@ -87,10 +87,28 @@ def delete_student_major(sess: Session):
     student.remove_major(major)
 
 
-def delete_student_section(sess: Session):
-    """Unenroll student from a section"""
-    print("Prompting you for the student and the major that they no longer have.")
+def delete_enrolled_student(session: Session):
+    """Unenroll student from the enrollment
+    AKA removes the student from section list
+    uses section method to remove it 
+    """
+    print("Prompting you for the section that the student is no longer enrolled in.")
+    section: Section = select_section(session)
+    student: Student = select_student(session)
+    section.remove_student(section)
+
+
+def delete_student_enrollment(sess: Session):
+    """Unenroll student from a section.
+    AKA The enrollment is removed from student list
+    uses student method to remove it just like in 
+    removing the major
+    """
+    print("Prompting you for the student and the enrollment that they no longer have.")
     student: Student = select_student(sess)
-    section: Major = select_section(sess)
-    student.delete_section(section)
+    section: Section = select_section(sess)
+    student.remove_section(section)
+
+
+
 
