@@ -37,16 +37,26 @@ def delete_course(session: Session):
         session.delete(course)
 
 
-def delete_section(session: Session):
+def delete_section(sess: Session):
     """
-    Prompt the user to select a section by its attributes, then delete it.
-    :param session: The connection to the database.
+    Delete a section if no students are enrolled.
+    :param sess: SQLAlchemy session object.
     :return: None
     """
-    print("Deleting a section")
-    section = select_section(session)
-    session.delete(section)
+    section = select_section(sess)
 
+    # Query to check if there are any students enrolled in the section
+    student_count = sess.query(Student).join(
+        Enrollment, Enrollment.studentId == Student.studentID).filter(
+        Enrollment.section == section).count()
+
+    if student_count > 0:
+        print("Cannot delete section. There are students enrolled in this section.")
+    else:
+        # Proceed to delete the section
+        sess.delete(section)
+        sess.commit()
+        print("Section deleted successfully.")
 
 def delete_student(session: Session):
     """
