@@ -23,9 +23,10 @@ from QuerySelect import select_course, select_department, select_major, select_s
 from QueryDelete import delete_course, delete_department, delete_major_student, delete_section, delete_student, delete_student_major
 from QueryList import list_department, list_course, list_section, list_department_courses, list_student, list_major, list_major_student, list_student_major
 # New functions made imported here
-from QueryList import list_student_enrollment, list_enrolled_student
+from QueryList import list_section_student, list_student_section
 from QueryAdd import add_student_section, add_section_student
-from QueryDelete import delete_student_enrollment, delete_enrolled_student
+from QueryDelete import delete_student_section, delete_section_student
+
 
 
 def add(sess: Session):

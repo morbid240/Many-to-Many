@@ -1,10 +1,11 @@
 '''
 Malcolm Roddy
-CECS 323 Section 01
+CECS 323 
 Many to Many
 Due date: 06/14/2024
 This defines the Section table and its 
-relationship to Course along with its constraints
+relationship to Course, Students through Enrollment 
+Association table
 '''
 
 from orm_base import Base
@@ -89,7 +90,7 @@ class Section(Base):
         self.courseNumber = course.courseNumber
 
     
-    def add_student(self, student):
+    def add_student(self, student, datetime):
         """    
         Adds a student to the list of students enrolled in the section
         Note: not creating a student but rather keeping track of its instance
@@ -120,8 +121,8 @@ class Section(Base):
 
         
     def __str__(self):
-        return f"Section number: {self.sectionNumber}, \nSemester: {self.semester}, {self.sectionYear}, \
-                Room: {self.building} {self.room} \nSchedule: {self.schedule}    {self.startTime}\nInstructor: {self.instructor}"
+        return f"Section number: {self.sectionNumber}, Semester: {self.semester}, {self.sectionYear}, \
+                Room: {self.building} {self.room} \nSchedule: {self.schedule} {self.startTime} Instructor: {self.instructor}"
     
 
 

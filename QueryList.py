@@ -1,9 +1,22 @@
+"""
+Malcolm Roddy
+CECS 323
+Many to Many 
+Due Date: 06/14/2024
+
+This module only contains methods 
+for listing all current objects 
+in the session
+"""
+
+
 from Department import Department
 from Course import Course
 from Section import Section 
 from Student import Student
 from Major import Major
 from StudentMajor import StudentMajor
+from Enrollment import Enrollment
 from QuerySelect import select_department, select_student, select_major
 from db_connection import Session
 
@@ -21,30 +34,53 @@ def list_department(session: Session):
         print(department)
 
 
+def list_department_courses(sess: Session):
+    """
+    List all courses department offers
+    """
+    department = select_department(sess)
+    dept_courses: [Course] = department.get_courses()
+    print("Course for department: " + str(department))
+    for dept_course in dept_courses:
+        print(dept_course)
+
+
 def list_course(sess: Session):
     """
     List all courses currently in the database.
     :param sess:    The connection to the database.
     :return:        None
     """
-    # session.query returns an iterator.  The list function converts that iterator
-    # into a list of elements.  In this case, they are instances of the Student class.
     courses: [Course] = list(sess.query(Course).order_by(Course.courseNumber))
     for course in courses:
         print(course)
 
+
 def list_section(session: Session):
+    """
+    List all sections currently in database
+    """
     sections: [Section] = list(session.query(Section).order_by(Section.sectionNumber))
     for section in sections:
         print(section)
 
 
-def list_department_courses(session: Session):
-    department = select_department(sess)
-    dept_courses: [Course] = department.get_courses()
-    print("Course for department: " + str(department))
-    for dept_course in dept_courses:
-        print(dept_course)
+def list_section_student(sess: Session):
+    """
+    List all students enrolled in a given section.
+    :param sess: SQLAlchemy session object.
+    :param section: The section object for which students need to be listed.
+    :return: None
+    """
+    section = select_section(sess)
+    # Query all students enrolled in the given section
+    students = sess.query(Student).join(
+        Enrollment, Enrollment.studentId == Student.studentID).filter(
+        Enrollment.section == section).all()
+
+    # Print out the details of each student
+    for student in students:
+        print(f"Student name: {student.lastName}, {student.firstName}")
 
 
 def list_student(sess: Session):
@@ -56,6 +92,27 @@ def list_student(sess: Session):
     students: [Student] = list(sess.query(Student).order_by(Student.lastName, Student.firstName))
     for student in students:
         print(student)
+
+
+def list_student_section(sess: Session):
+    """
+    Prompt the user for the student, then list the sections 
+    that the student is enrolled in.
+    departmentAbbreviation, courseNumber, sectionYear, semester, studentId
+
+    filter list by student
+    """
+    student: Student = select_student(sess)
+    # Join Enrollment to Student, then to section
+    recs = sess.query(Student).join(
+        Enrollment, Student.studentID == Enrollment.studentId).join(
+        Section, Enrollment.section).filter(
+                Student.studentID == student.studentID).add_columns(
+                    Section.departmentAbbreviation, Section.sectionNumber, 
+                    Section.sectionYear, Section.semester, Section.courseNumber).all()
+    for sec in recs:
+        print(f"{sec.departmentAbbreviation} {sec.courseNumber} {sec.semester} {sec.sectionYear}  Section: {sec.sectionNumber}")
+
 
 
 def list_student_major(sess: Session):
@@ -70,6 +127,7 @@ def list_student_major(sess: Session):
         Student.lastName, Student.firstName, Major.description, Major.name).all()
     for stu in recs:
         print(f"Student name: {stu.lastName}, {stu.firstName}, Major: {stu.name}, Description: {stu.description}")
+
 
 
 def list_major(sess: Session):
@@ -95,26 +153,3 @@ def list_major_student(sess: Session):
         Student.lastName, Student.firstName, Major.description, Major.name).all()
     for stu in recs:
         print(f"Student name: {stu.lastName}, {stu.firstName}, Major: {stu.name}, Description: {stu.description}")
-
-
-def list_student_enrollment(sess: Session):
-    """List all sections student is enrolled in
-    select student and list sections
-    """
-    student: Student = select_student(sess)
-    enrollments = sess.query(Student).join(Enrollments)
-
-
-def list_enrolled_student(sess: Session):
-    """List all students enrolled in a section
-    Select section and list students
-    """
-
-
-
-
-
-
-
-
-

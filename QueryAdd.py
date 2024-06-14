@@ -1,3 +1,12 @@
+"""
+Malcolm Roddy 
+CECS 323 
+Many to Many update
+
+This module deals with all additions to our tables
+including boilerplate
+"""
+
 from db_connection import Session
 from pprint import pprint
 from sqlalchemy import Time
@@ -8,12 +17,42 @@ from Student import Student
 from Major import Major
 from Enrollment import Enrollment
 from StudentMajor import StudentMajor
-"""
-Importing some helpful select functions. This file deals with all 
-user insertions into our tables
-"""
+
 from QuerySelect import select_course, select_department, select_student, select_section, select_major
 from SQLAlchemyUtilities import check_unique
+
+
+def boilerplate(sess: Session):
+    """
+    Add boilerplate data initially to jump start the testing.  Remember that there is no
+    checking of this data, so only run this option once from the console, or you will
+    get a uniqueness constraint violation from the database.
+    :param sess:    The session that's open.
+    :return:        None
+    """
+    department: Department = Department('CECS', 'Computer Engineering Computer Science')
+    course: Course = Course(department, 323, 'Database Fundamentals', 'Intro to databases', 3)
+    section: Section = Section(course,  1, 'Summer I', 2024, 'VEC', 405, 'MW', '09:00:00', 'Brown')
+    major1: Major = Major(department, 'Computer Science', 'Fun with blinking lights')
+    major2: Major = Major(department, 'Computer Engineering', 'Much closer to the silicon')
+    student1: Student = Student('Brown', 'David', 'david.brown@gmail.com')
+    student2: Student = Student('Brown', 'Mary', 'marydenni.brown@gmail.com')
+    student3: Student = Student('Disposable', 'Bandit', 'disposable.bandit@gmail.com')
+    student1.add_major(major1)
+    student2.add_major(major1)
+    student2.add_major(major2)
+    student3.add_section(section)
+    section.add_student(student3)
+    sess.add(department)
+    sess.add(course)
+    sess.add(section)
+    sess.add(major1)
+    sess.add(major2)
+    sess.add(student1)
+    sess.add(student2)
+    sess.add(student3)
+    sess.flush()    
+
 
 def add_department(session: Session):
     """
@@ -106,27 +145,31 @@ def add_section(session: Session):
     session.add(section)
 
 
-def add_major(session: Session):
+
+def add_section_student(session: Session):
+    """Enroll a student in a section
+    AKA add a section to the student's list of enrolled sections
     """
-    Prompt the user for the information for a new major and validate
-    the input to make sure that we do not create any duplicates.
-    :param session: The connection to the database.
-    :return:        None
-    """
-    print("Which department offers this major?")
-    department: Department = select_department(session)
-    unique_name: bool = False
-    name: str = ''
-    while not unique_name:
-        name = input("Major name--> ")
-        name_count: int = session.query(Major).filter(Major.departmentAbbreviation == department.abbreviation,
-                                                      ).count()
-        unique_name = name_count == 0
-        if not unique_name:
-            print("We already have a major by that name in that department.  Try again.")
-    description: str = input('Please give this major a description -->')
-    major: Major = Major(department, name, description)
-    session.add(major)
+    student: Student = select_student(session)
+    section: Section = select_section(session)
+
+    student_section_count: int = session.query(Enrollment).filter(
+        # Cant be enrolled in same section twice
+        # kinda shitty but using all the PKs not surrogate
+        Enrollment.studentID == student.studentID,
+        Enrollment.sectionYear== section.sectionYear,
+        Enrollment.semester == section.semester,
+        Enrollment.courseNumber == section.courseNumber,
+        Enrollment.departmentAbbreviation==section.departmentAbbreviation
+    ).count()
+
+    unique_student_section: bool = student_section_count == 0
+    while not unique_student_section:
+        print("That student is already enrolled in that section. Try again.")
+        section = select_section(session)
+        student = select_student(session)
+    student.add_section(section)
+    session.flush()
 
 
 def add_student(session: Session):
@@ -159,7 +202,32 @@ def add_student(session: Session):
     session.add(new_student)
 
 
-def add_student_major(session: Session):
+def add_student_section(session: Session):
+    """Enroll a student in a section
+    AKA adds a student to the section list of enrolled students
+    """
+    section: Section = select_section(session)
+    student: Student = select_student(session)
+
+    student_section_count: int = session.query(Enrollment).filter(
+        # Cant be enrolled in same section twice
+        Enrollment.studentID == student.studentID,
+        Enrollment.sectionYear== section.sectionYear,
+        Enrollment.semester == section.semester,
+        Enrollment.courseNumber == section.courseNumber,
+        Enrollment.departmentAbbreviation==section.departmentAbbreviation
+    ).count()
+
+    unique_student_section: bool = student_section_count == 0
+    while not unique_student_section:
+        print("That student is already enrolled in that section. Try again.")
+        student = select_student(session)
+        section = select_section(session)
+    section.add_student(student)
+    session.flush()
+
+
+def add_student_major(sess: Session):
     student: Student = select_student(sess)
     major: Major = select_major(sess)
     student_major_count: int = sess.query(StudentMajor).filter(StudentMajor.studentId == student.studentID,
@@ -182,6 +250,30 @@ def add_student_major(session: Session):
     committed later (which happens automatically when we exit the application)."""
     sess.add(student)                           # add the StudentMajor to the session
     sess.flush()
+
+
+def add_major(session: Session):
+    """
+    Prompt the user for the information for a new major and validate
+    the input to make sure that we do not create any duplicates.
+    :param session: The connection to the database.
+    :return:        None
+    """
+    print("Which department offers this major?")
+    department: Department = select_department(session)
+    unique_name: bool = False
+    name: str = ''
+    while not unique_name:
+        name = input("Major name--> ")
+        name_count: int = session.query(Major).filter(Major.departmentAbbreviation == department.abbreviation,
+                                                      ).count()
+        unique_name = name_count == 0
+        if not unique_name:
+            print("We already have a major by that name in that department.  Try again.")
+    description: str = input('Please give this major a description -->')
+    major: Major = Major(department, name, description)
+    session.add(major)
+
 
 
 def add_major_student(sess: Session):
@@ -207,97 +299,5 @@ def add_major_student(sess: Session):
     committed later (which happens automatically when we exit the application)."""
     sess.add(major)                           # add the StudentMajor to the session
     sess.flush()
-
-
-def add_student_section(session: Session):
-    """Enroll a student in a section
-    AKA adds a student to the section list of enrolled students
-    """
-    section: Section = select_section(session)
-    student: Student = select_student(session)
-
-    student_section_count: int = session.query(Enrollment).filter(
-        # Cant be enrolled in same section twice
-        # kinda shitty but using all the PKs not surrogate
-        Enrollment.studentID == student.studentID,
-        Enrollment.sectionYear== section.sectionYear,
-        Enrollment.semester == section.semester,
-        Enrollment.courseNumber == section.courseNumber,
-        Enrollment.departmentAbbreviation==section.departmentAbbreviation
-    ).count()
-
-    unique_student_section: bool = student_section_count == 0
-    while not unique_student_section:
-        print("That student is already enrolled in that section. Try again.")
-        student = select_student(session)
-        section = select_section(session)
-    section.add_student(student)
-    session.flush()
-
-
-def add_section_student(session: Session):
-    """Enroll a student in a section
-    AKA add a section to the student's list of enrolled sections
-    """
-    student: Student = select_student(session)
-    section: Section = select_section(session)
-
-    student_section_count: int = session.query(Enrollment).filter(
-        # Cant be enrolled in same section twice
-        # kinda shitty but using all the PKs not surrogate
-        Enrollment.studentID == student.studentID,
-        Enrollment.sectionYear== section.sectionYear,
-        Enrollment.semester == section.semester,
-        Enrollment.courseNumber == section.courseNumber,
-        Enrollment.departmentAbbreviation==section.departmentAbbreviation
-    ).count()
-
-    unique_student_section: bool = student_section_count == 0
-    while not unique_student_section:
-        print("That student is already enrolled in that section. Try again.")
-        section = select_section(session)
-        student = select_student(session)
-    student.add_section(section)
-    session.flush()
-
-
-def boilerplate(sess: Session):
-    """
-    Add boilerplate data initially to jump start the testing.  Remember that there is no
-    checking of this data, so only run this option once from the console, or you will
-    get a uniqueness constraint violation from the database.
-    :param sess:    The session that's open.
-    :return:        None
-    """
-    department: Department = Department('CECS', 'Computer Engineering Computer Science')
-    course: Course = Course(department, 323, 'Database Fundamentals', 'Intro to databases', 3)
-    section: Section = Section(course,  1, 'Summer I', 2024, 'VEC', 405, 'MW', '09:00:00', 'Brown')
-    major1: Major = Major(department, 'Computer Science', 'Fun with blinking lights')
-    major2: Major = Major(department, 'Computer Engineering', 'Much closer to the silicon')
-    student1: Student = Student('Brown', 'David', 'david.brown@gmail.com')
-    student2: Student = Student('Brown', 'Mary', 'marydenni.brown@gmail.com')
-    student3: Student = Student('Disposable', 'Bandit', 'disposable.bandit@gmail.com')
-    student1.add_major(major1)
-    student2.add_major(major1)
-    student2.add_major(major2)
-    student3.add_section(section)
-    section.add_student(student3)
-    sess.add(department)
-    sess.add(course)
-    sess.add(section)
-    sess.add(major1)
-    sess.add(major2)
-    sess.add(student1)
-    sess.add(student2)
-    sess.add(student3)
-    sess.flush()    
-        
-        
-
-    
-
-
-
-
 
 

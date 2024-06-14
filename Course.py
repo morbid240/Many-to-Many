@@ -5,7 +5,7 @@ Many to Many
 Due Date: 06/14/2024
 
 The only thing added here is the relationship of course to
-sections. Organized a tad but to see where attributes and constraints are
+sections
 """
 
 from orm_base import Base
@@ -20,17 +20,6 @@ class Course(Base):
     a section of the course an organized sequence of lessons and assignments
     aimed at teaching them specified skills."""
     __tablename__ = "courses"  # Give SQLAlchemy th name of the table.
-    """
-    The ForeignKey argument to the mapped_column method is not needed because I am 
-    specifying this foreign key constraint in the __table_args__ call farther down
-    in the code.  I can do this either "in-line" using ForeignKey in the mapped_column
-    call, OR (exclusive OR here) do it in __table_args__.
-    
-    If we have more than one column in the primary key of the parent, then we 
-    MUST use __table_args__, we canNOT express the foreign key constraint using
-    ForeignKey.  I show you how to do it in __table_args__ because you'll need
-    that for the relationship from courses into sections.
-    """
     # Primary Keys
     departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation',
                                                         primary_key=True)
@@ -59,6 +48,7 @@ class Course(Base):
         self.description = description
         self.units = units
 
+
     def set_department(self, department: Department):
         """
         Accept a new department withoug checking for any uniqueness.
@@ -69,6 +59,7 @@ class Course(Base):
         """
         self.department = department
         self.departmentAbbreviation = department.abbreviation
+
 
     def __str__(self):
         return f"Department abbrev: {self.departmentAbbreviation} number: {self.courseNumber} name: {self.name} units: {self.units}"
