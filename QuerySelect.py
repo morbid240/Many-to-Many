@@ -51,7 +51,6 @@ def select_course(sess: Session) -> Course:
     return course
 
 
-
 def select_section(sess: Session):
     """
     Select a section by its attributes.
