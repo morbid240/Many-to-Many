@@ -4,11 +4,11 @@ CECS 323
 Many to Many SQL
 Due Date: 06/14/2024
 
-Only stuff added here: 
+Stuff added here: 
     -import Enrollment assoication class
     -new relationship between student and section
-    -methods for adding/removing sections from the student
-Everything else remains unchanged (I think)
+    -methods for adding/removing instances of enrollment to the student
+Everything else remains unchanged besides a bit of reorganizing
 """
 
 from orm_base import Base
@@ -51,7 +51,6 @@ class Student(Base):
         self.email = email
 
 
-    # add/remove sections in student list
     def add_section(self, section):
         """Add a section to a list of sections the student is enrolled in currently."""
         for next_section in self.sections:
@@ -85,6 +84,7 @@ class Student(Base):
 #        major.students.append(student_major)                # Add this Student to the supplied Major.
 #        self.majors.append(student_major)                   # Add the supplied Major to this student.
 
+    
     def remove_major(self, major):
         """
         Remove a major from the list of majors that a student presently has declared.
@@ -99,5 +99,6 @@ class Student(Base):
                 self.majors.remove(next_major)
                 return
 
+    
     def __str__(self):
         return f"Student ID: {self.studentID} name: {self.lastName}, {self.firstName} e-mail: {self.email}"
