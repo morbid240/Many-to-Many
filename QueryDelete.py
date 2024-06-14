@@ -6,6 +6,25 @@ from Major import Major
 from QuerySelect import select_course, select_department, select_major, select_section, select_student
 from db_connection import Session
 
+def delete_student(sess: Session):
+    """
+    Delete a student if not enrolled in any sections.
+    :param sess: SQLAlchemy session object.
+    :return: None
+    """
+    student = select_student(sess)
+
+    # Query to check if the student is enrolled in any sections
+    enrollment_count = sess.query(Enrollment).filter(
+        Enrollment.studentId == student.studentID).count()
+
+    if enrollment_count > 0:
+        print("Cannot delete student. The student is enrolled in one or more sections.")
+    else:
+        # Proceed to delete the student
+        sess.delete(student)
+        sess.commit()
+        print("Student deleted successfully.")
 
 def delete_department(session: Session):
     """
