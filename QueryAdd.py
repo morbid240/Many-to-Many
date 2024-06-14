@@ -41,8 +41,11 @@ def boilerplate(sess: Session):
     student1.add_major(major1)
     student2.add_major(major1)
     student2.add_major(major2)
+
+    student1.add_section(section)
     student3.add_section(section)
-    section.add_student(student3)
+    student3.add_section(section)
+
     sess.add(department)
     sess.add(course)
     sess.add(section)
