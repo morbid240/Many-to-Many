@@ -17,7 +17,7 @@ from Student import Student
 from Major import Major
 from StudentMajor import StudentMajor
 from Enrollment import Enrollment
-from QuerySelect import select_department, select_student, select_major
+from QuerySelect import select_department, select_section, select_student, select_major
 from db_connection import Session
 
 
