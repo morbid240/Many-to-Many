@@ -16,7 +16,7 @@ from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from sqlalchemy import Table
 from constants import START_OVER, REUSE_NO_INTROSPECTION, INTROSPECT_TABLES
-
+from datetime import datetime
 from Course import Course
 from Enrollment import Enrollment
 
@@ -90,7 +90,7 @@ class Section(Base):
         self.courseNumber = course.courseNumber
 
     
-    def add_student(self, student, datetime):
+    def add_student(self, student):
         """    
         Adds a student to the list of students enrolled in the section
         Note: not creating a student but rather keeping track of its instance
@@ -100,12 +100,12 @@ class Section(Base):
         # Make sure that this section does not already have this Student.
         for next_student in self.students:
             if next_student.student == student:
-                return              # This student is already in this major.
+                return              # This student is already in this section
         # create the necessary Association Class instance that connects This section to
         # the supplied student.
         student_enrollment = Enrollment(student, self, datetime.now())
-#        student.majors.append(student_major)        # Add this new junction entry to the Student
-#        self.students.append(student_major)         # Add this new junction entry to this Major
+        student.section.append(student_enrollment)        # Add this new junction entry to the Student
+        self.students.append(student_enrollment)         # Add this new junction entry to this Section
 
     
     def remove_student(self, student):

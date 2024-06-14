@@ -169,6 +169,7 @@ def add_section_student(session: Session):
         section = select_section(session)
         student = select_student(session)
     student.add_section(section)
+    session.add(section)
     session.flush()
 
 
@@ -223,7 +224,10 @@ def add_student_section(session: Session):
         print("That student is already enrolled in that section. Try again.")
         student = select_student(session)
         section = select_section(session)
+    # Maps enrollment instance to section
     section.add_student(student)
+    # Add enrollment instance to the session
+    session.add(section)
     session.flush()
 
 
@@ -235,8 +239,8 @@ def add_student_major(sess: Session):
     unique_student_major: bool = student_major_count == 0
     while not unique_student_major:
         print("That student already has that major.  Try again.")
-        student = select_student(session)
-        major = select_major(session)
+        student = select_student(sess)
+        major = select_major(sess)
     student.add_major(major)
     """The student object instance is mapped to a specific row in the Student table.  But adding
     the new major to its list of majors does not add the new StudentMajor instance to this session.
@@ -273,7 +277,6 @@ def add_major(session: Session):
     description: str = input('Please give this major a description -->')
     major: Major = Major(department, name, description)
     session.add(major)
-
 
 
 def add_major_student(sess: Session):

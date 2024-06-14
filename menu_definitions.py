@@ -44,9 +44,11 @@ delete_menu = Menu('delete', 'Please indicate what you want to delete from:', [
     Option("Student", "delete_student(sess)"),
     Option("Student to Major", "delete_student_major(sess)"),
     Option("Major to Student", "delete_major_student(sess)"),
-    Option("Unenroll Student from Section", "delete_student_section(sess)"),
+    Option("Student to Section", "delete_student_section(sess)"),
+    Option("Section to Student", "delete_section_student(sess)"),
     Option("Exit", "pass")
 ])
+
 
 list_menu = Menu('list', 'Please indicate what you want to list:', [
     Option("Department", "list_department(sess)"),
@@ -54,11 +56,13 @@ list_menu = Menu('list', 'Please indicate what you want to list:', [
     Option("Section", "list_section(sess)"),
     Option("Major", "list_major(sess)"),
     Option("Student", "list_student(sess)"),
+    Option("Student to Section", "list_student_section(sess)"),
+    Option("Section to Student", "list_section_student(sess)"),
     Option("Student to Major", "list_student_major(sess)"),
     Option("Major to Student", "list_major_student(sess)"),
-    Option("List Student Enrollments", "list_section_student(sess)"),
     Option("Exit", "pass")
 ])
+
 
 # A menu to prompt for the amount of logging information to go to the console.
 debug_select = Menu('debug select', 'Please select a debug level:', [

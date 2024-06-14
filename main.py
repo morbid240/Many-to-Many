@@ -16,16 +16,25 @@ from Menu import Menu
      with them also being accessible here. 
     
     tried making a database manager module but had problems with scope  
+
+    Menu App:
+        a. Enroll Student in a Section 
+            add_student_section, add_section_student
+        b. Unenroll Student from a section
+            delete_student_section, delete_section_student
+        c. List Enrollments
+            list_student_section, list_section_student
+        d. Delete a section
+            delete_student_section, delete_section_student
+        e. Delete a student
+
+    
 """
 
-from QueryAdd import add_department, add_course, add_major, add_section, add_student, add_major_student, add_student_major, boilerplate
-from QuerySelect import select_course, select_department, select_major, select_section, select_student, select_student_from_list
-from QueryDelete import delete_course, delete_department, delete_major_student, delete_section, delete_student, delete_student_major
-from QueryList import list_department, list_course, list_section, list_department_courses, list_student, list_major, list_major_student, list_student_major
-# New functions made imported here
-from QueryList import list_section_student, list_student_section
-from QueryAdd import add_student_section, add_section_student
-from QueryDelete import delete_student_section, delete_section_student
+from QueryAdd import *
+from QuerySelect import *
+from QueryDelete import *
+from QueryList import *
 
 
 
@@ -49,6 +58,18 @@ def list_objects(sess: Session):
         list_action = list_menu.menu_prompt()
         exec(list_action)
 
+
+def session_rollback(sess):
+    """
+    Give the user a chance to roll back to the most recent commit point.
+    :param sess:    The connection to the database.
+    :return:        None
+    """
+    confirm_menu = Menu('main', 'Please select one of the following options:', [
+        Option("Yes, I really want to roll back this session", "sess.rollback()"),
+        Option("No, I hit this option by mistake", "pass")
+    ])
+    exec(confirm_menu.menu_prompt())
 
 
 if __name__ == '__main__':

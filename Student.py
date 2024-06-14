@@ -4,11 +4,10 @@ CECS 323
 Many to Many SQL
 Due Date: 06/14/2024
 
-Only stuff added here: 
+Stuff added here: 
     -import Enrollment assoication class
     -new relationship between student and section
     -methods for adding/removing sections from the student
-Everything else remains unchanged (I think)
 """
 
 from orm_base import Base
@@ -53,17 +52,21 @@ class Student(Base):
 
     # add/remove sections in student list
     def add_section(self, section):
-        """Add a section to a list of sections the student is enrolled in currently."""
+        """Add a section to a list of sections the student 
+        is enrolled in currently.
+        """
         for next_section in self.sections:
             if next_section.section == section:
                 return  # Student already enrolled in section
-        student_enrollment = Enrollment(section, self)
+        student_enrollment = Enrollment(section, self, datetime.now())
         section.students.append(student_enrollment)
         self.sections.append(student_enrollment)
 
     
     def remove_section(self, section):
-        """Remove a section from the list of sections the student is enrolled in."""
+        """Remove a section from the list of sections 
+        the student is enrolled in.
+        """
         for next_section in self.sections:
             if next_section.section == section:
                 self.sections.remove(next_section)
@@ -85,6 +88,7 @@ class Student(Base):
 #        major.students.append(student_major)                # Add this Student to the supplied Major.
 #        self.majors.append(student_major)                   # Add the supplied Major to this student.
 
+
     def remove_major(self, major):
         """
         Remove a major from the list of majors that a student presently has declared.
@@ -98,6 +102,7 @@ class Student(Base):
             if next_major.major == major:
                 self.majors.remove(next_major)
                 return
+
 
     def __str__(self):
         return f"Student ID: {self.studentID} name: {self.lastName}, {self.firstName} e-mail: {self.email}"
