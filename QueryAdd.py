@@ -31,24 +31,35 @@ def boilerplate(sess: Session):
     :return:        None
     """
     department: Department = Department('CECS', 'Computer Engineering Computer Science')
-    course: Course = Course(department, 323, 'Database Fundamentals', 'Intro to databases', 3)
-    section: Section = Section(course,  1, 'Summer I', 2024, 'VEC', 405, 'MW', '09:00:00', 'Brown')
+    course1: Course = Course(department, 323, 'Database Fundamentals', 'Intro to databases', 3)
+    course2: Course = Course(department, 326, 'Operating Systems', 'Intro to operating systems', 3)
+    section1: Section = Section(course1,  1, 'Summer I', 2024, 'VEC', 405, 'MW', '09:00:00', 'Professor Bill')
+    section2: Section = Section(course1,  1, 'Fall', 2024, 'VEC', 405, 'MW', '09:00:00', 'Professor Bill')
+    section3: Section = Section(course2,  3, 'Summer I', 2024, 'ECS', 100, 'TuTh', '09:00:00', 'Professor Ted')
     major1: Major = Major(department, 'Computer Science', 'Fun with blinking lights')
     major2: Major = Major(department, 'Computer Engineering', 'Much closer to the silicon')
     student1: Student = Student('Brown', 'David', 'david.brown@gmail.com')
     student2: Student = Student('Brown', 'Mary', 'marydenni.brown@gmail.com')
     student3: Student = Student('Disposable', 'Bandit', 'disposable.bandit@gmail.com')
+    
     student1.add_major(major1)
     student2.add_major(major1)
     student2.add_major(major2)
+    # Add 3 students into one section
+    student1.add_section(section1)
+    student2.add_section(section1)
+    student3.add_section(section1)
 
-    student1.add_section(section)
-    student3.add_section(section)
-    student3.add_section(section)
+    # Add 2 more sections into one student
+    student1.add_section(section2)
+    student1.add_section(section3)
 
     sess.add(department)
-    sess.add(course)
-    sess.add(section)
+    sess.add(course1)
+    sess.add(course2)
+    sess.add(section1)
+    sess.add(section2)
+    sess.add(section3)
     sess.add(major1)
     sess.add(major2)
     sess.add(student1)
