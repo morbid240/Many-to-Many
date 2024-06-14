@@ -121,8 +121,7 @@ class Section(Base):
 
         
     def __str__(self):
-        return f"{self.semester}, {self.sectionYear}, Section: {self.sectionNumber},
-        \nRoom: {self.building} {self.room} \nSchedule: {self.schedule} {self.startTime} Instructor: {self.instructor}"
+        return f"{self.semester}, {self.sectionYear}, Section: {self.sectionNumber}, \nRoom: {self.building} {self.room} \nSchedule: {self.schedule} {self.startTime} Instructor: {self.instructor}"
     
 
 
