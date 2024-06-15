@@ -18,7 +18,7 @@ def delete_section(sess: Session):
     # Query student and get count of all sections from the student
     n_students = sess.query(Student).join(
         Enrollment, Enrollment.studentId == Student.studentID).filter(
-        Enrollment.section == section).all().count()
+        Enrollment.section == section).count()
 
     if n_students>0:
         print(f"Sorry, there are {n_students} sections in that course. Delete them first, "
