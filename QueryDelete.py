@@ -13,20 +13,17 @@ def delete_section(sess: Session):
     Delete a section if no students are enrolled
     """
     print("Deleting a section")
-    # Check for valid student 
-    section = select_section(sess)
-    # Query student and get count of all sections from the student
-    n_students = sess.query(Student).join(
-        Enrollment, Enrollment.studentId == Student.studentID).filter(
-        Enrollment.section == section).count()
-
-    if n_students>0:
-        print(f"Sorry, there are {n_students} sections in that course. Delete them first, "
-              "then come back here to delete the course")
+    # Select the section to delete
+    section = select_section(sess)  # Assuming you have a function to select a section
+    
+    # Query enrollments associated with the section
+    n_enrollments = sess.query(Enrollment).filter(Enrollment.section == section).count()
+    
+    if n_enrollments > 0:
+        print(f"Sorry, there are {n_enrollments} students enrolled in that section. Delete the enrollments first.")
     else:
         sess.delete(section)
         print("Section deleted successfully from session")
-
 
 def delete_student(sess: Session):
     """
