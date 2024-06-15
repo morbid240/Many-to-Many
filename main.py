@@ -15,9 +15,7 @@ from Menu import Menu
      object is shared amongst all the functions the same way, 
      with them also being accessible here. 
     
-    tried making a database manager module but had problems with scope  
-
-    Menu App:
+    Menu App new features:
         a. Enroll Student in a Section 
             add_student_section, add_section_student
         b. Unenroll Student from a section
@@ -27,7 +25,6 @@ from Menu import Menu
         d. Delete a section
             delete_student_section, delete_section_student
         e. Delete a student
-
     
 """
 

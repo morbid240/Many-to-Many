@@ -90,12 +90,12 @@ class Section(Base):
         self.courseNumber = course.courseNumber
 
     
-    def add_student(self, student):
+    def add_enrollment(self, student):
         """    
-        Adds a student to the list of students enrolled in the section
+        Adds enrollment of student to the list of students enrolled in the section
         Note: not creating a student but rather keeping track of its instance
         association 
-        This is basically a rip off from add_major method
+        
         """
         # Make sure that this section does not already have this Student.
         for next_student in self.students:
@@ -108,7 +108,7 @@ class Section(Base):
         self.students.append(student_enrollment)         # Add this new junction entry to this Section
 
     
-    def remove_student(self, student):
+    def remove_enrollment(self, student):
         """
         Removes a student from the enrolled students in the section
         Assuming you found the student in the section 

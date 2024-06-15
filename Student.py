@@ -51,8 +51,8 @@ class Student(Base):
 
 
     # add/remove sections in student list
-    def add_section(self, section):
-        """Add a section to a list of sections the student 
+    def add_enrollment(self, section):
+        """Add a section instance to a list of sections the student 
         is enrolled in currently.
         """
         for next_section in self.sections:
@@ -63,20 +63,14 @@ class Student(Base):
         self.sections.append(student_enrollment)
 
     
-    def remove_section(self, section):
-        """Remove a section from the list of sections 
+    def remove_enrollment(self, section):
+        """Remove a section instance from the list of sections 
         the student is enrolled in.
         """
         for next_section in self.sections:
             if next_section.section == section:
                 self.sections.remove(next_section)
                 return
-    
-
-    def get_sections(self):
-        """Returns number of sections that the student is enrolled in
-        """
-        return self.sections
 
 
     def add_major(self, major):
