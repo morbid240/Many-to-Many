@@ -33,14 +33,19 @@ def delete_student(sess: Session):
     Delete a student if not enrolled in any sections.
     """
     print("Deleting a student")
-    # Select already ensures a valid student is selected  
-    student= select_student(sess)
-    # check list for sections
-    student_section_count = student.get_sections().count()
-    if student_section_count>0:
-        print(f"Sorry, there are {student_section_count} sections that student is enrolled in")
+    # Select the student to delete
+    student: Student = select_student(sess)  # Assuming you have a function to select a student
+    
+    # Query enrollments associated with the student
+    n_enrollments = sess.query(Enrollment).filter(Enrollment.studentId == student.studentID).count()
+
+    if n_enrollments > 0:
+        print(f"Sorry, the student is enrolled in {n_enrollments} section(s). Please remove enrollments first.")
     else:
         sess.delete(student)
+        print("Student deleted successfully.")
+
+
 
 def delete_department(session: Session):
     """
