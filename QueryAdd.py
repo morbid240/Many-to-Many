@@ -46,13 +46,13 @@ def boilerplate(sess: Session):
     student2.add_major(major1)
     student2.add_major(major2)
     # Add 3 students into one section
-    student1.add_section(section1)
-    student2.add_section(section1)
-    student3.add_section(section1)
+    student1.add_enrollment(section1)
+    student2.add_enrollment(section1)
+    student3.add_enrollment(section1)
 
     # Add 2 more sections into one student
-    student1.add_section(section2)
-    student1.add_section(section3)
+    student1.add_enrollment(section2)
+    student1.add_enrollment(section3)
 
     sess.add(department)
     sess.add(course1)
@@ -182,7 +182,7 @@ def add_section_student(session: Session):
         print("That student is already enrolled in that section. Try again.")
         section = select_section(session)
         student = select_student(session)
-    student.add_section(section)
+    student.add_enrollment(section)
     session.add(section)
     session.flush()
 
@@ -239,7 +239,7 @@ def add_student_section(session: Session):
         student = select_student(session)
         section = select_section(session)
     # Maps enrollment instance to section
-    section.add_student(student)
+    section.add_enrollment(student)
     # Add enrollment instance to the session
     session.add(section)
     session.flush()
