@@ -1,14 +1,9 @@
-import logging
-from constants import *
-from menu_definitions import menu_main, add_menu, delete_menu, list_menu, debug_select, introspection_select
-from IntrospectionFactory import IntrospectionFactory
-from db_connection import engine, Session
-from orm_base import metadata
-from Option import Option
-from Menu import Menu
-
-
 """
+Malcolm Roddy
+CECS 323
+Many to Many update
+Due Date: 06/14/2024
+
      Got tired of scrolling up and down for functions, 
      figured out a way for encapuslation. Im still a bit 
      confused agout scope here, but it seems like the session
@@ -28,6 +23,17 @@ from Menu import Menu
     
 """
 
+import logging
+from constants import *
+from menu_definitions import menu_main, add_menu, delete_menu, list_menu, debug_select, introspection_select
+from IntrospectionFactory import IntrospectionFactory
+from db_connection import engine, Session
+from orm_base import metadata
+from Option import Option
+from Menu import Menu
+
+
+# These all contain table ops for modularity
 from QueryAdd import *
 from QuerySelect import *
 from QueryDelete import *
