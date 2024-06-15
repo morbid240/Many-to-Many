@@ -3,28 +3,44 @@ from Department import Department
 from Course import Course
 from Student import Student
 from Major import Major
+from Enrollment import Enrollment
 from QuerySelect import select_course, select_department, select_major, select_section, select_student
 from db_connection import Session
+
+
+def delete_section(sess: Session):
+    """
+    Delete a section if no students are enrolled
+    """
+    print("Deleting a section")
+    # Check for valid student 
+    section = select_section(sess)
+    # Query student and get count of all sections from the student
+    n_students = sess.query(Student).join(
+        Enrollment, Enrollment.studentId == Student.studentID).filter(
+        Enrollment.section == section).all().count()
+
+    if n_students>0:
+        print(f"Sorry, there are {n_students} sections in that course. Delete them first, "
+              "then come back here to delete the course")
+    else:
+        sess.delete(section)
+        print("Section deleted successfully from session")
+
 
 def delete_student(sess: Session):
     """
     Delete a student if not enrolled in any sections.
-    :param sess: SQLAlchemy session object.
-    :return: None
     """
-    student = select_student(sess)
-
-    # Query to check if the student is enrolled in any sections
-    enrollment_count = sess.query(Enrollment).filter(
-        Enrollment.studentId == student.studentID).count()
-
-    if enrollment_count > 0:
-        print("Cannot delete student. The student is enrolled in one or more sections.")
+    print("Deleting a student")
+    # Select already ensures a valid student is selected  
+    student= select_student(sess)
+    # check list for sections
+    student_section_count = student.get_sections().count()
+    if student_section_count>0:
+        print(f"Sorry, there are {student_section_count} sections that student is enrolled in")
     else:
-        # Proceed to delete the student
         sess.delete(student)
-        sess.commit()
-        print("Student deleted successfully.")
 
 def delete_department(session: Session):
     """
@@ -50,48 +66,13 @@ def delete_course(session: Session):
     """
     print("Deleting a course")
     course: Course = select_course(session)
-    if 0 < session.query(Section).filter(Section.courseNumber == course.courseNumber).count():
-        print("Sections depend on this course, go delete them first and try again.")
+    n_sections = session.query(Section).filter(Section.courseNumber == course.courseNumber).count()
+    if n_sections>0:
+        print(f"Sorry, there are {n_sections} sections in that course. Delete them first, "
+              "then come back here to delete the course")
     else:
         session.delete(course)
 
-
-def delete_section(sess: Session):
-    """
-    Delete a section if no students are enrolled.
-    :param sess: SQLAlchemy session object.
-    :return: None
-    """
-    section = select_section(sess)
-
-    # Query to check if there are any students enrolled in the section
-    student_count = sess.query(Student).join(
-        Enrollment, Enrollment.studentId == Student.studentID).filter(
-        Enrollment.section == section).count()
-
-    if student_count > 0:
-        print("Cannot delete section. There are students enrolled in this section.")
-    else:
-        # Proceed to delete the section
-        sess.delete(section)
-        sess.commit()
-        print("Section deleted successfully.")
-
-def delete_student(session: Session):
-    """
-    Prompt the user for a student to delete and delete them.
-    :param session:     The current connection to the database.
-    :return:            None
-    """
-    student: Student = select_student(session)
-    """This is a bit ghetto.  The relationship from Student to StudentMajor has 
-    cascade delete, so this delete will work even if a student has declared one
-    or more majors.  I could write a method on Student that would return some
-    indication of whether it has any children, and use that to let the user know
-    that they cannot delete this particular student.  But I'm too lazy at this
-    point.
-    """
-    session.delete(student)
 
 
 def delete_student_section(sess: Session):
@@ -107,7 +88,7 @@ def delete_section_student(sess: Session):
     print("Prompting you for section that is dropping the enrolled student")
     section: Section = select_section(sess)
     student: Student = select_student(sess)
-    section.remove_enrollment()
+    section.remove_enrollment(student)
 
 
 def delete_major_student(sess: Session):

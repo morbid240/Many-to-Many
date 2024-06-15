@@ -71,6 +71,12 @@ class Student(Base):
             if next_section.section == section:
                 self.sections.remove(next_section)
                 return
+    
+
+    def get_sections(self):
+        """Returns number of sections that the student is enrolled in
+        """
+        return self.sections
 
 
     def add_major(self, major):
