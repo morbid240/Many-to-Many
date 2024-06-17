@@ -140,7 +140,32 @@ def add_section_student(session: Session):
     student.add_enrollment(section)
     session.add(section)
     session.flush()
+def add_section_student2(session: Session):
+    """
+    Enroll student in section. Uses prof code 
+    """
+    student: Student = select_student(session)
+    section: Section = select_section(session)
 
+    """If a student is not enrolled in any section of
+    CECS 323 during the Fall of 2023, then we certainly
+    know that they are not enrolled in the section of 
+    CECS 323 that the user has selected. """
+    is_enrolled = session.query(Enrollment).join(Section).filter(
+        # Seeing if there is a match of student enrolled in section
+        Enrollment.student == student,
+        Section.sectionNumber == section.sectionNumber,
+        Section.departmentAbbreviation == section.departmentabbreviation,
+        Section.courseNumber == section.courseNumber,
+        Section.sectionYear == section.sectionYear,
+        Section.semester == section.semester
+    ).count() > 0
+
+    if is_enrolled:
+        print("That student is already enrolled in that section. Try again.")
+    student.add_enrollment(section)
+    session.add(section)
+    session.flush()
 
 def add_student(session: Session):
     """
