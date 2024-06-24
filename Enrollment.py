@@ -13,6 +13,7 @@ Todo: store data time instance
 """
 
 from sqlalchemy import ForeignKey, Date, ForeignKeyConstraint, UniqueConstraint
+from sqlalchemy import String, Integer, Time
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from orm_base import Base
 from datetime import datetime
