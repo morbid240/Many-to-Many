@@ -21,7 +21,7 @@ class LetterGrade(Enrollment):
     Subclass of Enrollment representing letter grades.
     """
         
-    __tablename__ = "letter_grade"
+    __tablename__ = "letter_grades"
     
     # Defining our pk and inheritance 
     gradeId: Mapped[int] = mapped_column(
@@ -34,8 +34,9 @@ class LetterGrade(Enrollment):
     # Another attribute 
     minSatisfactory: Mapped[str] = mapped_column("min_satisfactory", String(1), nullable=False)
 
-    # relationship to Enrollment (unidirectional)
-    enrollment = relationship("Enrollment")
+    # Relationships - inheriting from Enrollment
+    section = relationship("Section", back_populates="students")
+    student = relationship("Student", back_populates="sections")
     
     """Constraints added here. Since we only got one pk no need really for this I think"""
     CheckConstraint(minSatisfactory.in_(['A', 'B', 'C', 'D', 'F']), name='letter_grade_uk_01'),
