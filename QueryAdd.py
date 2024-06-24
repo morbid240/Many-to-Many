@@ -56,7 +56,6 @@ def add_student_letter_grade(session: Session):
 
     letter_grade = LetterGrade(student=student, section=section, enrollment_date=enrollment_date, grade=grade)
     session.add(letter_grade)
-    session.commit()
 
     print(f"Added letter grade {grade} for student {student.firstName} {student.lastName} "
           f"in section {section.departmentAbbreviation} {section.courseNumber}-{section.sectionNumber} "
