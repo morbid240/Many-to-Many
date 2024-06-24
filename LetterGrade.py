@@ -34,7 +34,9 @@ class LetterGrade(Enrollment):
     # Another attribute 
     minSatisfactory: Mapped[str] = mapped_column("min_satisfactory", String(1), nullable=False)
 
-
+    # relationship to Enrollment (unidirectional)
+    enrollment = relationship("Enrollment")
+    
     """Constraints added here. Since we only got one pk no need really for this I think"""
     CheckConstraint(minSatisfactory.in_(['A', 'B', 'C', 'D', 'F']), name='letter_grade_uk_01'),
 
