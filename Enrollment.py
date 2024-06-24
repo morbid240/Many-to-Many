@@ -12,9 +12,14 @@ Essentially contains only foreign keys from Student/Sections
 Todo: store data time instance 
 """
 
-from sqlalchemy import ForeignKey, Date, ForeignKeyConstraint, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from orm_base import Base
+from db_connection import engine
+from sqlalchemy import UniqueConstraint, ForeignKeyConstraint, ForeignKey
+from sqlalchemy import String
+from typing import List
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+
 from datetime import datetime
 
 
