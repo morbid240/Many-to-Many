@@ -11,7 +11,7 @@ Due Date: 06/23/2024
 from sqlalchemy import Date, ForeignKey, String, UniqueConstraint, CheckConstraint
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
-from Enrollment import Enrollment
+
 
 
 
@@ -34,13 +34,10 @@ class LetterGrade(Enrollment):
     # Another attribute 
     minSatisfactory: Mapped[str] = mapped_column("min_satisfactory", String(1), nullable=False)
 
-    # Relationships - inheriting from Enrollment
-    section = relationship("Section", back_populates="students")
-    student = relationship("Student", back_populates="sections")
-    
-    """Constraints added here. Since we only got one pk no need really for this I think"""
-    CheckConstraint(minSatisfactory.in_(['A', 'B', 'C', 'D', 'F']), name='letter_grade_uk_01'),
-
+    # Constraints
+    __table_args__ = (
+        CheckConstraint(min_satisfactory.in_(['A', 'B', 'C', 'D', 'F']), name='letter_grade_ck_min_satisfactory'),
+    )
 
     """This is what makes it defined as inheritable"""
     __mapper_args__ = {
