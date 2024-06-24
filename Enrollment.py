@@ -56,9 +56,9 @@ class Enrollment(Base):
     )
     
     # Polymorphism stuff
-     __mapper_args__ = {
+    __mapper_args__ = {
          "polymorphic_identity": "enrollment", "polymorphic_on": "type"
-     }
+    }
 
     def __init__(self, student, section, enrollment_date: datetime):
         # init student values
