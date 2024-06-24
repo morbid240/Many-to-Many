@@ -8,8 +8,8 @@ Due Date: 06/23/2024
 """
 
 
-from sqlalchemy import Date, ForeignKey
-from sqlalchemy.orm import mapped_column, Mapped, String, UniqueConstraint, CheckConstraint
+from sqlalchemy import Date, ForeignKey, String, UniqueConstraint, CheckConstraint
+from sqlalchemy.orm import mapped_column, Mapped
 
 from Enrollment import Enrollment
 
