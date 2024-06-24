@@ -1,20 +1,8 @@
-"""
-Malcolm Roddy
-CECS 323
-Many to Many SQL
-Due Date: 06/14/2024
-
-Stuff added here: 
-    -import Enrollment assoication class
-    -new relationship between student and section
-    -methods for adding/removing sections from the student
-"""
-
 from orm_base import Base
 from sqlalchemy import Column, Integer, UniqueConstraint, Identity
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import List                 # Use this for the list of Majors that this student has
+from typing import List  # Use this for the list of Majors that this student has
 from StudentMajor import StudentMajor
 from Enrollment import Enrollment
 from datetime import datetime
@@ -22,56 +10,35 @@ from datetime import datetime
 
 class Student(Base):
     """An individual who may or may not be enrolled at the university, who
-    enrolls in courses toward some educational objective. That objective
+    enrolls in courses toward some educational objective.  That objective
     could be a formal degree program, or it could be a specialized certificate."""
-    __tablename__ = "students"
+    __tablename__ = "students"  # Give SQLAlchemy th name of the table.
     # Let SQLAlchemy handle the generation of student_id values for us.
     studentID: Mapped[int] = mapped_column('student_id', Integer, Identity(start=1, cycle=True), primary_key=True)
     lastName: Mapped[str] = mapped_column('last_name', String(50), nullable=False, primary_key=False)
     firstName: Mapped[str] = mapped_column('first_name', String(50), nullable=False, primary_key=False)
     email: Mapped[str] = mapped_column('email', String(255), nullable=False)
-    # Relationships
-    majors: Mapped[List["StudentMajor"]] = relationship(
-        "StudentMajor", back_populates="student", cascade="all, save-update, delete-orphan"
-    )
-    sections: Mapped[List["Enrollment"]] = relationship(
-        "Enrollment", back_populates="student", cascade="all, save-update, delete-orphan"
-    )
-    #Constraints
-    __table_args__ = (
-        UniqueConstraint("first_name", "last_name", name="students_uk_01"),
-        UniqueConstraint("email", name="students_uk_02")
-    )
-
+    # A list of StudentMajor instances that connect this student to a list of majors.
+    """We need to be able to delete the association class rows without using session.delete.
+    The way that we will DISassociate a Major from a Student is to delete an instance
+    of this list of StudentMajors that connects this Student to the Major that we want
+    to disassociate.  But to get that to work in the database, we need to configure
+    the relationship such that breaking the association at this end propagates a 
+    deletion in the association table to go along with it."""
+    majors: Mapped[List["StudentMajor"]] = relationship(back_populates="student",
+                                                        cascade="all, save-update, delete-orphan")
+    sections: Mapped[List["Enrollment"]] = relationship(back_populates="student",
+                                                        cascade="all, save-update, delete-orphan")
+    # __table_args__ can best be viewed as directives that we ask SQLAlchemy to
+    # send to the database.  In this case, that we want two separate uniqueness
+    # constraints (candidate keys).
+    __table_args__ = (UniqueConstraint("first_name", "last_name", name="students_uk_01"),
+                      UniqueConstraint("email", name="students_uk_02"))
 
     def __init__(self, lastName: str, firstName: str, email: str):
         self.lastName = lastName
         self.firstName = firstName
         self.email = email
-
-
-    # add/remove sections in student list
-    def add_enrollment(self, section):
-        """Add a section instance to a list of sections the student 
-        is enrolled in currently.
-        """
-        for next_section in self.sections:
-            if next_section.section == section:
-                return  # Student already enrolled in section
-        student_enrollment = Enrollment(self, section, datetime.now())
-        section.students.append(student_enrollment)
-        self.sections.append(student_enrollment)
-
-    
-    def remove_enrollment(self, section):
-        """Remove a section instance from the list of sections 
-        the student is enrolled in.
-        """
-        for next_section in self.sections:
-            if next_section.section == section:
-                self.sections.remove(next_section)
-                return
-
 
     def add_major(self, major):
         """Add a new major to the student.  We are not actually adding a major directly
@@ -82,12 +49,22 @@ class Student(Base):
         # Make sure that this student does not already have this major.
         for next_major in self.majors:
             if next_major.major == major:
-                return                  # This student already has this major
+                return  # This student already has this major
         # Create the new instance of StudentMajor to connect this Student to the supplied Major.
         student_major = StudentMajor(self, major, datetime.now())
-        major.students.append(student_major)                # Add this Student to the supplied Major.
-        self.majors.append(student_major)                   # Add the supplied Major to this student.
 
+    #        major.students.append(student_major)                # Add this Student to the supplied Major.
+    #        self.majors.append(student_major)                   # Add the supplied Major to this student.
+
+    def add_section(self, section):
+        """Add a new section to the student, enroll them into that section.
+        :param  section:    The section that the student is enrolling in.
+        :return             None
+        """
+        for next_section in self.sections:
+            if next_section.section == section:
+                return  # This student is already enrolled.
+        enrollment = Enrollment(section, self)
 
     def remove_major(self, major):
         """
@@ -103,6 +80,11 @@ class Student(Base):
                 self.majors.remove(next_major)
                 return
 
+    def remove_section(self, section):
+        for next_section in self.sections:
+            if next_section.section == section:
+                self.sections.remove(next_section)
+                return
 
     def __str__(self):
         return f"Student ID: {self.studentID} name: {self.lastName}, {self.firstName} e-mail: {self.email}"
