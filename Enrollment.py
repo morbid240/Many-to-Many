@@ -15,7 +15,7 @@ Todo: store data time instance
 from orm_base import Base
 from db_connection import engine
 from sqlalchemy import UniqueConstraint, ForeignKeyConstraint, ForeignKey
-from sqlalchemy import String
+from sqlalchemy import String, Date
 from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
