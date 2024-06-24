@@ -1,7 +1,7 @@
 """
 Malcolm Roddy 
 CECS 323 
-Many to Many update
+Inheritance update
 
 This module deals with all additions to our tables
 including boilerplate
@@ -61,6 +61,8 @@ def add_student_letter_grade(session: Session):
     print(f"Added letter grade {grade} for student {student.firstName} {student.lastName} "
           f"in section {section.departmentAbbreviation} {section.courseNumber}-{section.sectionNumber} "
           f"{section.semester} {section.sectionYear}")
+
+
 def add_department(session: Session):
     """
     Prompt the user for the information for a new department and validate
