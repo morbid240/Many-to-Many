@@ -39,17 +39,18 @@ class Enrollment(Base):
     you can do the relationship between student and section.
     """
     # Migrating FK from student, only one
-    studentId: Mapped[int] = mapped_column('student_id', ForeignKey("students.student_id"), primary_key=True)
+    studentId: Mapped[int] = mapped_column('student_id', ForeignKey("students.student_id"), nullable=False)
     # Migrating FKs from Section
-    departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation',primary_key=True)
-    courseNumber: Mapped[int] = mapped_column('course_number', primary_key=True)
-    sectionNumber: Mapped[int] = mapped_column('section_number', primary_key=True)
-    semester: Mapped[str] = mapped_column('semester', primary_key=True)
-    sectionYear: Mapped[int] = mapped_column('section_year', primary_key=True)
+    departmentAbbreviation: Mapped[str] = mapped_column('department_abbreviation',nullable=False)
+    courseNumber: Mapped[int] = mapped_column('course_number', nullable=False)
+    sectionNumber: Mapped[int] = mapped_column('section_number', nullable=False)
+    semester: Mapped[str] = mapped_column('semester', String(20), nullable=False)
+    sectionYear: Mapped[int] = mapped_column('section_year', nullable=False)
     
     enrollmentDate: Mapped[Date] = mapped_column('declaration_date', Date, nullable=False)
 
     type: Mapped[str] = mapped_column("type", String(50), nullable=False)
+    
     __table_args__ = (
         # Unique constraint to ensure a student cannot enroll in the same course more than once per semester
         UniqueConstraint(
