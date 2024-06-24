@@ -27,6 +27,15 @@ class Enrollment(Base):
     # Relationships - child to section and student
     section: Mapped["Section"] = relationship("Section", back_populates="students")  
     student: Mapped["Student"] = relationship("Student", back_populates="sections") 
+    
+    # Added surrogate key
+    enrollmentId: Mapped[int] = mapped_column(
+        'enrollment_id', 
+        Integer, 
+        Identity(start=1, cycle=True), 
+        primary_key=True
+    )
+    
     """Without a surrogate, I used all FKs and set them as a composite PK so that 
     you can do the relationship between student and section.
     """
