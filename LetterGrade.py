@@ -39,7 +39,11 @@ class LetterGrade(Enrollment):
         CheckConstraint(min_satisfactory.in_(['A', 'B', 'C', 'D', 'F']), name='letter_grade_uk_01'),
     )
 
-
+    # mapper for polymorphism
+    __mapper_args__ = {
+        "polymorphic_identity": "letter_grades"
+    }
+    
     # Constructor
     def __init__(self, section, student, min_satisfactory: str, grade: str):
         super().__init__(section, student)
