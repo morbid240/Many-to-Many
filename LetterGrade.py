@@ -24,9 +24,9 @@ class LetterGrade(Enrollment):
     __tablename__ = "letter_grade"
     
     grade: Mapped[int] = mapped_column(
-        'grade_id', ForeignKey(
-                "enrollments.enrollment_id", ondelete="CASCADE"
-        ), 
+        # Pk mapped to parent 
+        'grade_id', 
+        ForeignKey("enrollments.enrollment_id", ondelete="CASCADE"), 
         primary_key=True
     )
 
@@ -38,14 +38,12 @@ class LetterGrade(Enrollment):
         CheckConstraint(minSatisfactory.in_(['A', 'B', 'C', 'D', 'F']), name='letter_grade_uk_01'),
     )
 
+    """This is what makes it defined as inheritable"""
     __mapper_args__ = {
         "polymorphic_identity": "letter_grade"
     }
 
-    __table_args__ = (
-        CheckConstraint(minSatisfactory.in_(['A', 'B', 'C', 'D', 'F']), name='check_min_satisfactory'),
-    )
-
+    # Constructor
     def __init__(self, section, student, min_satisfactory: str, grade: str):
         super().__init__(section, student)
         self.minSatisfactory = min_satisfactory
