@@ -17,12 +17,50 @@ from Student import Student
 from Major import Major
 from Enrollment import Enrollment
 from StudentMajor import StudentMajor
-
+from LetterGrade import LetterGrade
 from QuerySelect import select_course, select_department, select_student, select_section, select_major
 from SQLAlchemyUtilities import check_unique
 
 
+def add_student_letter_grade(session: Session):
+    """
+    Prompt the user for information to add a new letter grade for a student in a section.
+    Validate input to ensure no duplicates are created.
+    
+    :param session: The SQLAlchemy session to use for database operations.
+    :return: None
+    """
+    student = select_student(session)
+    section = select_section(session)
 
+    # Check if the student is already enrolled in the selected section
+    is_enrolled = session.query(LetterGrade).join(Enrollment).filter(
+        Enrollment.studentId == student.studentID,
+        Enrollment.departmentAbbreviation == section.departmentAbbreviation,
+        Enrollment.courseNumber == section.courseNumber,
+        Enrollment.sectionNumber == section.sectionNumber,
+        Enrollment.semester == section.semester,
+        Enrollment.sectionYear == section.sectionYear
+    ).count() > 0
+
+    if is_enrolled:
+        print("That student is already assigned a letter grade for this section.")
+        return
+
+    grade = input("Enter the grade ('A', 'B', 'C', 'D', 'F'): ").upper()
+    while grade not in {'A', 'B', 'C', 'D', 'F'}:
+        print("Invalid grade. Please enter one of: 'A', 'B', 'C', 'D', 'F'.")
+        grade = input("Enter the grade ('A', 'B', 'C', 'D', 'F'): ").upper()
+
+    enrollment_date = datetime.now()  # Assuming enrollment date is current date/time
+
+    letter_grade = LetterGrade(student=student, section=section, enrollment_date=enrollment_date, grade=grade)
+    session.add(letter_grade)
+    session.commit()
+
+    print(f"Added letter grade {grade} for student {student.firstName} {student.lastName} "
+          f"in section {section.departmentAbbreviation} {section.courseNumber}-{section.sectionNumber} "
+          f"{section.semester} {section.sectionYear}")
 def add_department(session: Session):
     """
     Prompt the user for the information for a new department and validate
