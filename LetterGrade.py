@@ -23,17 +23,19 @@ class LetterGrade(Enrollment):
         
     __tablename__ = "letter_grade"
     
-    grade: Mapped[int] = mapped_column(
-        # Pk mapped to parent 
-        'grade_id', 
+    # Defining our pk and inheritance 
+    gradeId: Mapped[int] = mapped_column(
+        'grade_id', # name of pk in table
+        # ensure we got cascade delete on and set it as a pk 
         ForeignKey("enrollments.enrollment_id", ondelete="CASCADE"), 
         primary_key=True
     )
 
+    # Another attribute 
     minSatisfactory: Mapped[str] = mapped_column("min_satisfactory", String(1), nullable=False)
 
 
-    # Constraints
+   """Constraints added here. Since we only got one pk no need really for this I think"""
     __table_args__ = (
         CheckConstraint(minSatisfactory.in_(['A', 'B', 'C', 'D', 'F']), name='letter_grade_uk_01'),
     )
