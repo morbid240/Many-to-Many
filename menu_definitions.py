@@ -29,6 +29,7 @@ add_menu = Menu('add', 'Please indicate what you want to add:', [
     Option("Section", "add_section(sess)"),
     Option("Major", "add_major(sess)"),
     Option("Student", "add_student(sess)"),
+    Option("Student to Grade", "add_student_letter_grade(sess)"),
     Option("Student to Major", "add_student_major(sess)"),
     Option("Major to Student", "add_major_student(sess)"),
     Option("Student to Section", "add_student_section(sess)"),
