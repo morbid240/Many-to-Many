@@ -1,19 +1,18 @@
 """
 Malcolm Roddy 
 CECS 323
-Many to Many
-Due Date: 06/14/2024
+Inheritance update 
 
 This contains the association class that connects Students
 with Sections. 
 Basically a rip off from StudentMajor 
 Essentially contains only foreign keys from Student/Sections
 
-Todo: store data time instance 
+Added surrogate key 
 """
 
 from sqlalchemy import ForeignKey, Date, ForeignKeyConstraint, UniqueConstraint
-from sqlalchemy import String, Integer, Time
+from sqlalchemy import String, Integer, Time, Identity
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from orm_base import Base
 from datetime import datetime
