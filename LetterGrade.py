@@ -35,7 +35,7 @@ class LetterGrade(Enrollment):
     minSatisfactory: Mapped[str] = mapped_column("min_satisfactory", String(1), nullable=False)
 
 
-   """Constraints added here. Since we only got one pk no need really for this I think"""
+    """Constraints added here. Since we only got one pk no need really for this I think"""
     __table_args__ = (
         CheckConstraint(minSatisfactory.in_(['A', 'B', 'C', 'D', 'F']), name='letter_grade_uk_01'),
     )
