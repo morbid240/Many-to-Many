@@ -52,8 +52,9 @@ class Enrollment(Base):
             ['department_abbreviation', 'course_number', 'section_number', 'semester', 'section_year'],
             ['sections.department_abbreviation', 'sections.course_number', 'sections.section_number', 'sections.semester', 'sections.section_year'],
             name = "enrollments_sections_fk_01"
-        ),
+        )
     )
+    
     # Polymorphism stuff
      __mapper_args__ = {
          "polymorphic_identity": "enrollment", "polymorphic_on": "type"
