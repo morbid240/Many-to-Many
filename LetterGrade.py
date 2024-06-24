@@ -36,9 +36,8 @@ class LetterGrade(Enrollment):
 
 
     """Constraints added here. Since we only got one pk no need really for this I think"""
-    __table_args__ = (
-        CheckConstraint(minSatisfactory.in_(['A', 'B', 'C', 'D', 'F']), name='letter_grade_uk_01'),
-    )
+    CheckConstraint(minSatisfactory.in_(['A', 'B', 'C', 'D', 'F']), name='letter_grade_uk_01'),
+
 
     """This is what makes it defined as inheritable"""
     __mapper_args__ = {
